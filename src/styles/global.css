@@ -1,0 +1,54 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Dark mode colors */
+  --dark-color-darkest: #223032;
+  --dark-color-dark: #6b7580;
+  --dark-color-medium: #a2a8ae;
+  --dark-color-light: #afb6c0;
+  --dark-color-lightest: #cce1e9;
+
+  /* Light mode colors */
+  --light-color-darkest: #223032;
+  --light-color-dark: #6b7580;
+  --light-color-medium: #a2a8ae;
+  --light-color-light: #afb6c0;
+  --light-color-lightest: #cce1e9;
+
+  /* Theme variables */
+  --bg-primary: var(--light-color-lightest);
+  --bg-secondary: var(--light-color-light);
+  --bg-accent: var(--light-color-medium);
+  --text-primary: var(--light-color-darkest);
+  --text-secondary: var(--light-color-dark);
+  --border-color: var(--light-color-medium);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: var(--dark-color-darkest);
+    --bg-secondary: var(--dark-color-dark);
+    --bg-accent: var(--dark-color-medium);
+    --text-primary: var(--dark-color-lightest);
+    --text-secondary: var(--dark-color-light);
+    --border-color: var(--dark-color-dark);
+  }
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
