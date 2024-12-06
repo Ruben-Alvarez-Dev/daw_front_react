@@ -1,24 +1,24 @@
 .card {
-  background-color: var(--bg-primary);
-  border-radius: 0.5rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--border-color);
-  overflow: hidden;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .cardHeader {
-  padding: 1rem;
-  background-color: var(--bg-secondary);
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--border-color);
-  font-weight: 500;
+  margin-bottom: 1rem;
 }
 
 .cardBody {
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 .cardFooter {
-  padding: 1rem;
-  background-color: var(--bg-secondary);
+  padding-top: 1rem;
   border-top: 1px solid var(--border-color);
+  margin-top: 1rem;
 }

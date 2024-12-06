@@ -32,5 +32,61 @@
       "status": "active",
       "lastLogin": "2024-01-14T16:30:00Z"
     }
+  ],
+  "restaurants": [
+    {
+      "id": "2",
+      "name": "Sushi Master",
+      "address": "45 Ocean Avenue",
+      "phone": "+34 666 789 012",
+      "cuisine": "japanese",
+      "status": "open",
+      "rating": 4.8
+    },
+    {
+      "id": "3",
+      "name": "El Rincón",
+      "address": "78 Tapas Street",
+      "phone": "+34 666 345 678",
+      "cuisine": "spanish",
+      "status": "closed",
+      "rating": 4.2
+    },
+    {
+      "id": "4",
+      "name": "Le Bistrot",
+      "address": "90 French Quarter",
+      "phone": "+34 666 901 234",
+      "cuisine": "french",
+      "status": "open",
+      "rating": 4.6
+    },
+    {
+      "id": "5",
+      "name": "Taj Mahal",
+      "address": "34 Spice Road",
+      "phone": "+34 666 567 890",
+      "cuisine": "indian",
+      "status": "closed",
+      "rating": 4.3
+    },
+    {
+      "id": "a083",
+      "name": "r2f",
+      "address": "f24f4",
+      "phone": "1212",
+      "cuisine": "italian",
+      "status": "open",
+      "rating": 4
+    },
+    {
+      "id": "2b13",
+      "name": "2r2",
+      "address": "214f2f",
+      "phone": "123g42g",
+      "cuisine": "italian",
+      "status": "open",
+      "rating": 4
+    }
   ]
 }

@@ -1,12 +1,14 @@
-import React from 'react'
-import styles from './Restaurants.module.css'
+import React from 'react';
+import RestaurantsComponent from '../../components/specific/restaurants/Restaurants';
+import styles from './Restaurants.module.css';
 
-const Restaurants = () => {
+const RestaurantsPage = () => {
   return (
-    <div className={styles.restaurants}>
-      <h1>Restaurants</h1>
+    <div className={styles.restaurantsPage}>
+      <h1>Gestión de Restaurantes</h1>
+      <RestaurantsComponent />
     </div>
-  )
-}
+  );
+};
 
-export default Restaurants
+export default RestaurantsPage;
