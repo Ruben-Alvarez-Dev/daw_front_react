@@ -1,14 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { MdDashboard, MdPeople, MdRestaurant, MdTableBar, MdEventNote, MdSettings } from 'react-icons/md';
 import './Aside.css';
 
 const menuItems = [
-  { path: '/dashboard', name: 'Dashboard', icon: '📊' },
-  { path: '/users', name: 'Users', icon: '👥' },
-  { path: '/restaurants', name: 'Restaurants', icon: '🍽️' },
-  { path: '/tables', name: 'Tables', icon: '🪑' },
-  { path: '/reservations', name: 'Reservations', icon: '📅' },
-  { path: '/settings', name: 'Settings', icon: '⚙️' },
+  { path: '/dashboard', name: 'Dashboard', icon: MdDashboard },
+  { path: '/users', name: 'Users', icon: MdPeople },
+  { path: '/restaurants', name: 'Restaurants', icon: MdRestaurant },
+  { path: '/tables', name: 'Tables', icon: MdTableBar },
+  { path: '/reservations', name: 'Reservations', icon: MdEventNote },
+  { path: '/settings', name: 'Settings', icon: MdSettings },
 ];
 
 const Aside = () => {
@@ -23,7 +24,9 @@ const Aside = () => {
               `nav-link ${isActive ? 'active' : ''}`
             }
           >
-            <span className="nav-icon">{item.icon}</span>
+            <span className="nav-icon">
+              {React.createElement(item.icon)}
+            </span>
             <span className="nav-text">{item.name}</span>
           </NavLink>
         ))}
