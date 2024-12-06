@@ -5,38 +5,42 @@
 }
 
 :root {
-  /* Dark mode colors */
-  --dark-color-darkest: #223032;
-  --dark-color-dark: #6b7580;
-  --dark-color-medium: #a2a8ae;
-  --dark-color-light: #afb6c0;
-  --dark-color-lightest: #cce1e9;
-
-  /* Light mode colors */
-  --light-color-darkest: #223032;
-  --light-color-dark: #6b7580;
-  --light-color-medium: #a2a8ae;
-  --light-color-light: #afb6c0;
-  --light-color-lightest: #cce1e9;
-
-  /* Theme variables */
-  --bg-primary: var(--light-color-lightest);
-  --bg-secondary: var(--light-color-light);
-  --bg-accent: var(--light-color-medium);
-  --text-primary: var(--light-color-darkest);
-  --text-secondary: var(--light-color-dark);
-  --border-color: var(--light-color-medium);
+  /* Existing theme variables */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-accent: #e9ecef;
+  --bg-hover: #f1f3f5;
+  
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  
+  --border-color: #dee2e6;
+  
+  /* Status colors */
+  --success-bg: #d4edda;
+  --success-text: #155724;
+  --error-bg: #f8d7da;
+  --error-text: #721c24;
 }
 
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-primary: var(--dark-color-darkest);
-    --bg-secondary: var(--dark-color-dark);
-    --bg-accent: var(--dark-color-medium);
-    --text-primary: var(--dark-color-lightest);
-    --text-secondary: var(--dark-color-light);
-    --border-color: var(--dark-color-dark);
+    --bg-primary: #212529;
+    --bg-secondary: #343a40;
+    --bg-accent: #495057;
+    --bg-hover: #2b3035;
+    
+    --text-primary: #f8f9fa;
+    --text-secondary: #adb5bd;
+    
+    --border-color: #495057;
+    
+    /* Status colors for dark theme */
+    --success-bg: #1c4023;
+    --success-text: #8fd19e;
+    --error-bg: #4b1c23;
+    --error-text: #e4606d;
   }
 }
 

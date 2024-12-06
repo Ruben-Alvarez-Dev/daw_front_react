@@ -1,0 +1,78 @@
+.usersContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.body {
+  min-height: 200px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table th {
+  font-weight: 600;
+  background-color: var(--bg-secondary);
+}
+
+.table tr:hover {
+  background-color: var(--bg-hover);
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.statusActive {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+}
+
+.statusInactive {
+  background-color: var(--error-bg);
+  color: var(--error-text);
+}
+
+.role {
+  text-transform: capitalize;
+}
+
+.error {
+  color: var(--error-text);
+}
+
+.listSection {
+  width: 100%;
+}
+
+.formSection {
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}

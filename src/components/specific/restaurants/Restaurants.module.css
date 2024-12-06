@@ -1,0 +1,5 @@
+.restaurantsContainer {
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}

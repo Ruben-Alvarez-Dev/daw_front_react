@@ -3,4 +3,49 @@
   height: 100%;
   background-color: var(--bg-primary);
   border-right: 1px solid var(--border-color);
+  transition: width 0.3s ease;
+}
+
+.aside:hover {
+  width: 15rem;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.navLink:hover {
+  background-color: var(--bg-secondary);
+}
+
+.active {
+  background-color: var(--bg-accent);
+  color: var(--text-primary);
+}
+
+.icon {
+  width: 1.5rem;
+  text-align: center;
+  margin-right: 1rem;
+}
+
+.text {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.aside:hover .text {
+  opacity: 1;
 }

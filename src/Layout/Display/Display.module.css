@@ -1,7 +1,6 @@
 .display {
   flex: 1;
-  height: 100%;
-  background-color: var(--bg-accent);
-  color: var(--text-primary);
   padding: 1rem;
+  overflow-y: auto;
+  background-color: var(--bg-primary);
 }
