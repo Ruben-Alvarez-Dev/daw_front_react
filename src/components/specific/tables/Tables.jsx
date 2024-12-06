@@ -1,70 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Tables.module.css';
-import RestaurantSelector from './RestaurantSelector';
+import { useAppContext } from '../../../context/AppContext';
+import { Card } from '../../common';
 import TableList from './TableList';
 import TableForm from './TableForm';
-import { Card } from '../../common';
+import RestaurantSelector from '../restaurants/RestaurantSelector';
 
 const Tables = () => {
-  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  const [selectedZone, setSelectedZone] = useState('all');
+  const { selectedRestaurant, activeZone, setActiveZone } = useAppContext();
   const [selectedTable, setSelectedTable] = useState(null);
+  const [zones, setZones] = useState([]);
 
-  const handleRestaurantSelect = (restaurant) => {
-    setSelectedRestaurant(restaurant);
-    setSelectedZone('all');
-    setSelectedTable(null);
-  };
+  useEffect(() => {
+    if (selectedRestaurant) {
+      fetchZones();
+    } else {
+      setZones([]);
+      setActiveZone('');
+      setSelectedTable(null);
+    }
+  }, [selectedRestaurant]);
 
-  const handleZoneChange = (zone) => {
-    setSelectedZone(zone);
-    setSelectedTable(null);
+  const fetchZones = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/restaurants/${selectedRestaurant.id}`);
+      if (!response.ok) throw new Error('Failed to fetch zones');
+      const data = await response.json();
+      setZones(data.zones || []);
+    } catch (error) {
+      console.error('Error fetching zones:', error);
+      setZones([]);
+    }
   };
 
   const handleTableSelect = (table) => {
     setSelectedTable(table);
   };
 
-  const handleTableSaved = () => {
-    setSelectedTable(null);
-  };
-
-  const handleTableDeleted = () => {
-    setSelectedTable(null);
-  };
-
   return (
     <div className={styles.tablesContainer}>
-      <div className={styles.restaurantSection}>
-        <RestaurantSelector
-          onSelectRestaurant={handleRestaurantSelect}
-          selectedRestaurant={selectedRestaurant}
-        />
-      </div>
-      <div className={styles.tablesSection}>
-        <Card>
+      <div className={styles.mainContent}>
+        <Card className={styles.leftSection}>
+          <RestaurantSelector />
+        </Card>
+
+        <Card className={styles.centerSection}>
           {selectedRestaurant ? (
-            <TableList
-              restaurantId={selectedRestaurant.id}
-              zones={selectedRestaurant.zones}
-              selectedZone={selectedZone}
-              onZoneChange={handleZoneChange}
-              onSelectTable={handleTableSelect}
-            />
-          ) : (
-            <div className={styles.noSelection}>
-              Select a restaurant to view its tables
+            <div>
+              <select 
+                value={activeZone} 
+                onChange={(e) => setActiveZone(e.target.value)}
+                className={styles.zoneSelector}
+              >
+                <option value="">All Zones</option>
+                {zones.map((zone) => (
+                  <option key={zone} value={zone}>
+                    {zone}
+                  </option>
+                ))}
+              </select>
+              <TableList
+                restaurantId={selectedRestaurant.id}
+                zones={zones}
+                selectedZone={activeZone}
+                onSelectTable={handleTableSelect}
+                selectedTable={selectedTable}
+              />
             </div>
+          ) : (
+            <p>Please select a restaurant first</p>
           )}
         </Card>
-      </div>
-      <div className={styles.formSection}>
-        <TableForm
-          selectedRestaurant={selectedRestaurant}
-          selectedTable={selectedTable}
-          onTableSaved={handleTableSaved}
-          onTableDeleted={handleTableDeleted}
-        />
+
+        <Card className={styles.rightSection}>
+          <TableForm
+            restaurantId={selectedRestaurant?.id}
+            table={selectedTable}
+            zones={zones}
+            onClose={() => setSelectedTable(null)}
+          />
+        </Card>
       </div>
     </div>
   );

@@ -1,22 +1,22 @@
 import React, { createContext, useContext, useState } from 'react';
 
-export const AppContext = createContext();
+const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [selectedZone, setSelectedZone] = useState(null);
   const [selectedTable, setSelectedTable] = useState(null);
+  const [activeZone, setActiveZone] = useState('');
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const value = {
     selectedRestaurant,
     setSelectedRestaurant,
-    selectedUser,
-    setSelectedUser,
-    selectedZone,
-    setSelectedZone,
     selectedTable,
     setSelectedTable,
+    activeZone,
+    setActiveZone,
+    selectedUser,
+    setSelectedUser,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
@@ -29,3 +29,5 @@ export const useAppContext = () => {
   }
   return context;
 };
+
+export default AppContext;

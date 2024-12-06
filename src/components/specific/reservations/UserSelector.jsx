@@ -1,20 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './UserSelector.module.css';
 import { Card, Title } from '../../common';
-import { AppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../../context/AppContext';
 
-const UserSelector = ({ onSelectUser, selectedUser }) => {
+const UserSelector = () => {
+  const { selectedUser, setSelectedUser } = useAppContext();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { setSelectedUser } = useContext(AppContext);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('Fetching users...');
         const response = await fetch('http://localhost:3000/users');
         
         if (!response.ok) {
@@ -22,7 +21,6 @@ const UserSelector = ({ onSelectUser, selectedUser }) => {
         }
         
         const data = await response.json();
-        console.log('Received users:', data);
         setUsers(data);
       } catch (err) {
         console.error('Error fetching users:', err);
@@ -36,10 +34,6 @@ const UserSelector = ({ onSelectUser, selectedUser }) => {
   }, []);
 
   const handleUserSelect = (user) => {
-    if (onSelectUser) {
-      onSelectUser(user);
-    }
-    // Actualizar el contexto global
     setSelectedUser(user);
   };
 

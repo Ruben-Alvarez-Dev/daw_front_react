@@ -5,3 +5,5 @@ export { default as Subtitle } from './Subtitle/Subtitle';
 export { default as Alert } from './Alert/Alert';
 export { default as Modal } from './Modal/Modal';
 export { default as Button } from './Button/Button';
+export { default as Select } from './Select/Select';
+export { default as Input } from './Input/Input';

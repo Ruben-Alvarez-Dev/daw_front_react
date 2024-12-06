@@ -1,8 +1,54 @@
 .reservationsContainer {
-  padding: 1rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+  height: 100%;
+  padding: 1rem;
+}
+
+.selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.selectorSection {
+  background-color: var(--bg-card);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.selectorSection h2 {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  height: 100%;
+  min-height: 0;
+}
+
+.listSection {
+  height: 100%;
+  overflow: hidden;
+}
+
+.formSection {
+  height: 100%;
+  overflow: hidden;
+}
+
+.error {
+  color: var(--error);
+  padding: 1rem;
+  background-color: var(--error-light);
+  border-radius: 0.5rem;
+  margin-top: 1rem;
 }
 
 .mainContent {

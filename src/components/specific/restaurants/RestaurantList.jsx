@@ -1,95 +1,70 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React from 'react';
 import styles from './RestaurantList.module.css';
 import { Card, Title } from '../../common';
+import { useAppContext } from '../../../context/AppContext';
 
-const RestaurantList = forwardRef(({ onSelectRestaurant }, ref) => {
-  const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const RestaurantList = ({ restaurants, onSelectRestaurant }) => {
+  const { selectedRestaurant, setSelectedRestaurant } = useAppContext();
 
-  const fetchRestaurants = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('/api/restaurants');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setRestaurants(data);
-      setError(null);
-    } catch (err) {
-      console.error('Error fetching restaurants:', err);
-      setError('Failed to load restaurants');
-    } finally {
-      setLoading(false);
+  const handleRestaurantClick = (restaurant) => {
+    setSelectedRestaurant(restaurant);
+    if (onSelectRestaurant) {
+      onSelectRestaurant(restaurant);
     }
   };
 
-  useImperativeHandle(ref, () => ({
-    fetchRestaurants
-  }));
-
-  useEffect(() => {
-    fetchRestaurants();
-  }, []);
-
   const renderStatus = (status) => {
-    const statusClass = status === 'open' ? styles.statusOpen : styles.statusClosed;
-    return <span className={`${styles.status} ${statusClass}`}>{status}</span>;
+    const statusClasses = {
+      open: styles.statusOpen,
+      closed: styles.statusClosed,
+      temporarily_closed: styles.statusTemporary
+    };
+    return <span className={`${styles.status} ${statusClasses[status] || ''}`}>{status}</span>;
   };
 
-  const renderRating = (rating) => {
-    return '★'.repeat(Math.floor(rating)) + '☆'.repeat(5 - Math.floor(rating));
-  };
-
-  if (loading) {
-    return <div>Loading restaurants...</div>;
-  }
-
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
+  if (!restaurants?.length) {
+    return (
+      <Card>
+        <div className={styles.noRestaurants}>No restaurants found</div>
+      </Card>
+    );
   }
 
   return (
     <Card>
-      <Title>Restaurant List</Title>
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Cuisine</th>
-              <th>Address</th>
-              <th>Phone</th>
-              <th>Status</th>
-              <th>Rating</th>
-            </tr>
-          </thead>
-          <tbody>
-            {restaurants.map((restaurant) => (
-              <tr
-                key={restaurant.id}
-                onClick={() => onSelectRestaurant(restaurant)}
-                className={styles.tableRow}
-              >
-                <td>{restaurant.name}</td>
-                <td>{restaurant.cuisine}</td>
-                <td>{restaurant.address}</td>
-                <td>{restaurant.phone}</td>
-                <td>{renderStatus(restaurant.status)}</td>
-                <td>{renderRating(restaurant.rating)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className={styles.totalCount}>
-        Total Restaurants: {restaurants.length}
+      <Title>Restaurants</Title>
+      <div className={styles.list}>
+        {restaurants.map(restaurant => (
+          <div
+            key={restaurant.id}
+            className={`${styles.restaurantCard} ${selectedRestaurant?.id === restaurant.id ? styles.selected : ''}`}
+            onClick={() => handleRestaurantClick(restaurant)}
+          >
+            <div className={styles.header}>
+              <h3 className={styles.name}>{restaurant.name}</h3>
+              {renderStatus(restaurant.status)}
+            </div>
+            <div className={styles.info}>
+              <p className={styles.address}>{restaurant.address}</p>
+              <p className={styles.phone}>{restaurant.phone}</p>
+              <p className={styles.cuisine}>Cuisine: {restaurant.cuisine}</p>
+              <p className={styles.rating}>Rating: {restaurant.rating}</p>
+              <div className={styles.zones}>
+                <span className={styles.zonesLabel}>Zones:</span>
+                <div className={styles.zonesList}>
+                  {(restaurant.zones || ['main']).map(zone => (
+                    <span key={zone} className={styles.zoneTag}>
+                      {zone}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </Card>
   );
-});
-
-RestaurantList.displayName = 'RestaurantList';
+};
 
 export default RestaurantList;

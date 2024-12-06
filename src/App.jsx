@@ -1,31 +1,28 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './Layout/Layout';
-import './styles/global.css';
-
-// Importar las vistas
-import Dashboard from './views/Dashboard/Dashboard';
-import Reservations from './views/Reservations/Reservations';
-import Restaurants from './views/Restaurants/Restaurants';
-import Tables from './views/Tables/Tables';
-import Users from './views/Users/Users';
-import Settings from './views/Settings/Settings';
+import Dashboard from './components/specific/dashboard/Dashboard';
+import Users from './components/specific/users/Users';
+import Restaurants from './components/specific/restaurants/Restaurants';
+import Tables from './components/specific/tables/Tables';
+import Reservations from './components/specific/reservations/Reservations';
+import Settings from './components/specific/settings/Settings';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="reservations" element={<Reservations />} />
+          <Route path="users" element={<Users />} />
           <Route path="restaurants" element={<Restaurants />} />
           <Route path="tables" element={<Tables />} />
-          <Route path="users" element={<Users />} />
+          <Route path="reservations" element={<Reservations />} />
           <Route path="settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 

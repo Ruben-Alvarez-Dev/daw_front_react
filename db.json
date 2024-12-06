@@ -4,31 +4,111 @@
       "id": 1,
       "name": "Sushi Master",
       "cuisine": "Japanese",
-      "status": "Open"
+      "status": "open",
+      "address": "123 Sushi St",
+      "phone": "555-0101",
+      "rating": 4.5,
+      "zones": [
+        "main",
+        "terrace",
+        "private"
+      ]
     },
     {
       "id": 2,
       "name": "El Rincón",
       "cuisine": "Spanish",
-      "status": "Open"
+      "status": "open",
+      "address": "456 Tapas Ave",
+      "phone": "555-0102",
+      "rating": 4.2,
+      "zones": [
+        "main",
+        "bar",
+        "garden"
+      ]
     },
     {
       "id": 3,
       "name": "Le Bistrot",
       "cuisine": "French",
-      "status": "Closed"
+      "status": "closed",
+      "address": "789 Paris Rd",
+      "phone": "555-0103",
+      "rating": 4.8,
+      "zones": [
+        "main",
+        "terrace"
+      ]
     },
     {
       "id": 4,
       "name": "Taj Mahal",
       "cuisine": "Indian",
-      "status": "Closed"
+      "status": "closed",
+      "address": "321 Curry Ln",
+      "phone": "555-0104",
+      "rating": 4.3,
+      "zones": [
+        "main",
+        "private"
+      ]
     },
     {
       "id": 5,
-      "name": "r2f",
+      "name": "La Piazza",
       "cuisine": "Italian",
-      "status": "Open"
+      "status": "open",
+      "address": "567 Pizza St",
+      "phone": "555-0105",
+      "rating": 4,
+      "zones": [
+        "main",
+        "terrace",
+        "garden"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "id": 1,
+      "restaurantId": 1,
+      "number": 1,
+      "capacity": 4,
+      "zone": "main",
+      "status": "available"
+    },
+    {
+      "id": 2,
+      "restaurantId": 1,
+      "number": 2,
+      "capacity": 2,
+      "zone": "main",
+      "status": "occupied"
+    },
+    {
+      "id": 3,
+      "restaurantId": 1,
+      "number": 3,
+      "capacity": 6,
+      "zone": "terrace",
+      "status": "available"
+    },
+    {
+      "id": 4,
+      "restaurantId": 1,
+      "number": 4,
+      "capacity": 4,
+      "zone": "terrace",
+      "status": "reserved"
+    },
+    {
+      "id": 5,
+      "restaurantId": 1,
+      "number": 5,
+      "capacity": 8,
+      "zone": "private",
+      "status": "available"
     }
   ],
   "users": [
@@ -39,7 +119,7 @@
     },
     {
       "id": 2,
-      "name": "Jane Smith1111",
+      "name": "Jane Smith",
       "email": "jane.smith@example.com"
     },
     {
@@ -88,6 +168,14 @@
       "restaurantId": 1,
       "userId": 1,
       "status": "pending"
+    },
+    {
+      "id": "8b2e",
+      "restaurantId": 1,
+      "userId": 1,
+      "date": "2024-12-29T08:54:00.000Z",
+      "numberOfGuests": 2,
+      "notes": "r2ff"
     }
   ]
 }

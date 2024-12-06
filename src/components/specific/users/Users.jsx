@@ -1,32 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Users.module.css';
 import UserList from './UserList';
 import UserForm from './UserForm';
 import { useAppContext } from '../../../context/AppContext';
 
 const Users = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
-  const { setSelectedUser: setGlobalUser } = useAppContext();
+  const { selectedUser, setSelectedUser } = useAppContext();
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleUserSelect = (user) => {
-    setSelectedUser(user);
-    setGlobalUser(user);
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:3000/users');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setUsers(data);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching users:', err);
+      setError(`Error loading users: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleUserSaved = () => {
     setSelectedUser(null);
-    setGlobalUser(null);
+    fetchUsers(); // Recargar usuarios después de guardar
   };
 
   const handleUserDeleted = () => {
     setSelectedUser(null);
-    setGlobalUser(null);
+    fetchUsers(); // Recargar usuarios después de eliminar
   };
+
+  if (loading) return <div>Loading users...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className={styles.usersContainer}>
       <div className={styles.listSection}>
-        <UserList onSelectUser={handleUserSelect} />
+        <UserList users={users} />
       </div>
       <div className={styles.formSection}>
         <UserForm

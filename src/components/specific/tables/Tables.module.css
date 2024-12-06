@@ -1,21 +1,47 @@
 .tablesContainer {
+  padding: 1rem;
+  height: 100%;
+  width: 100%;
+}
+
+.mainContent {
   display: grid;
   grid-template-columns: 300px 1fr 300px;
   gap: 1rem;
+  height: 100%;
+}
+
+.leftSection,
+.centerSection,
+.rightSection {
+  height: 100%;
+  overflow-y: auto;
+  background: var(--surface-color);
+  border-radius: 8px;
   padding: 1rem;
-  height: 100%;
 }
 
-.restaurantSection,
-.tablesSection,
-.formSection {
-  height: 100%;
-  min-height: 0;
+/* Responsive design */
+@media (max-width: 1200px) {
+  .mainContent {
+    grid-template-columns: 250px 1fr 250px;
+  }
 }
 
-.noSelection {
-  padding: 2rem;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
+@media (max-width: 992px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 1rem;
+  }
+
+  .leftSection,
+  .centerSection,
+  .rightSection {
+    height: auto;
+  }
+
+  .centerSection {
+    min-height: 400px;
+  }
 }

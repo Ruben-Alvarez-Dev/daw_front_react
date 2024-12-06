@@ -1,61 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './ReservationList.module.css';
 import { Card } from '../../common';
+import { useAppContext } from '../../../context/AppContext';
 
-const ReservationList = ({ restaurantId, onSelectReservation, selectedReservation }) => {
-  const [reservations, setReservations] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+const ReservationList = ({ reservations }) => {
+  const { selectedReservation, setSelectedReservation } = useAppContext();
 
-  useEffect(() => {
-    if (!restaurantId) {
-      setReservations([]);
-      setError(null);
-      return;
-    }
+  const handleReservationClick = (reservation) => {
+    console.log('Selected reservation:', reservation);
+    setSelectedReservation(reservation);
+  };
 
-    const fetchReservations = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        console.log('Fetching reservations for restaurant:', restaurantId);
-        const response = await fetch(`http://localhost:3000/reservations?restaurantId=${restaurantId}`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch reservations');
-        }
-        
-        const data = await response.json();
-        console.log('Received reservations:', data);
-        setReservations(data);
-      } catch (err) {
-        console.error('Error fetching reservations:', err);
-        setError('Could not load reservations. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchReservations();
-  }, [restaurantId]);
-
-  if (!restaurantId) {
-    return (
-      <div className={styles.message}>
-        Please select a restaurant to view its reservations
-      </div>
-    );
-  }
-
-  if (loading) {
-    return <div className={styles.message}>Loading reservations...</div>;
-  }
-
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
-  }
-
-  if (reservations.length === 0) {
+  if (!reservations?.length) {
     return (
       <div className={styles.message}>
         No reservations found for this restaurant
@@ -63,38 +19,52 @@ const ReservationList = ({ restaurantId, onSelectReservation, selectedReservatio
     );
   }
 
-  const formatDate = (dateStr) => {
-    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateStr).toLocaleDateString(undefined, options);
+  const formatDateTime = (dateStr) => {
+    const date = new Date(dateStr);
+    return {
+      date: date.toLocaleDateString('es-ES', { 
+        weekday: 'short', 
+        day: 'numeric', 
+        month: 'short', 
+        year: 'numeric' 
+      }),
+      time: date.toLocaleTimeString('es-ES', { 
+        hour: '2-digit', 
+        minute: '2-digit'
+      })
+    };
   };
 
   return (
     <div className={styles.reservationList}>
-      {reservations.map((reservation) => (
-        <Card
-          key={reservation.id}
-          onClick={() => onSelectReservation(reservation)}
-          className={`${styles.reservationCard} ${
-            selectedReservation?.id === reservation.id ? styles.selected : ''
-          }`}
-        >
-          <div className={styles.reservationInfo}>
-            <div className={styles.dateTime}>
-              <span>{formatDate(reservation.date)}</span>
-              <span>{reservation.time}</span>
+      {reservations.map((reservation) => {
+        const { date, time } = formatDateTime(reservation.date);
+        return (
+          <Card
+            key={reservation.id}
+            onClick={() => handleReservationClick(reservation)}
+            className={`${styles.reservationCard} ${
+              selectedReservation?.id === reservation.id ? styles.selected : ''
+            }`}
+          >
+            <div className={styles.reservationInfo}>
+              <div className={styles.dateTime}>
+                <span>{date}</span>
+                <span>{time}</span>
+              </div>
+              <div className={styles.details}>
+                <span>Guests: {reservation.numberOfGuests}</span>
+                <span className={`${styles.status} ${styles[reservation.status]}`}>
+                  {reservation.status}
+                </span>
+              </div>
+              {reservation.notes && (
+                <div className={styles.notes}>{reservation.notes}</div>
+              )}
             </div>
-            <div className={styles.details}>
-              <span>Guests: {reservation.guests}</span>
-              <span className={`${styles.status} ${styles[reservation.status]}`}>
-                {reservation.status}
-              </span>
-            </div>
-            {reservation.notes && (
-              <div className={styles.notes}>{reservation.notes}</div>
-            )}
-          </div>
-        </Card>
-      ))}
+          </Card>
+        );
+      })}
     </div>
   );
 };

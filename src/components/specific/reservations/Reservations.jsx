@@ -1,78 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Reservations.module.css';
-import RestaurantSelector from '../tables/RestaurantSelector';
+import RestaurantSelector from '../restaurants/RestaurantSelector';
 import UserSelector from './UserSelector';
 import ReservationList from './ReservationList';
 import ReservationForm from './ReservationForm';
 import { useAppContext } from '../../../context/AppContext';
 
 const Reservations = () => {
-  const {
+  const { 
     selectedRestaurant,
-    setSelectedRestaurant,
     selectedUser,
-    setSelectedUser
+    selectedReservation, 
+    setSelectedReservation 
   } = useAppContext();
-  const [selectedReservation, setSelectedReservation] = useState(null);
+  
+  const [reservations, setReservations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleRestaurantSelect = (restaurant) => {
-    setSelectedRestaurant(restaurant);
-    setSelectedReservation(null);
-  };
+  useEffect(() => {
+    if (selectedRestaurant) {
+      fetchReservations();
+    } else {
+      setReservations([]);
+    }
+  }, [selectedRestaurant]);
 
-  const handleUserSelect = (user) => {
-    setSelectedUser(user);
-    setSelectedReservation(null);
-  };
+  const fetchReservations = async () => {
+    if (!selectedRestaurant) return;
 
-  const handleReservationSelect = (reservation) => {
-    setSelectedReservation(reservation);
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(`http://localhost:3000/reservations?restaurantId=${selectedRestaurant.id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setReservations(data);
+    } catch (err) {
+      console.error('Error fetching reservations:', err);
+      setError(`Error loading reservations: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleReservationSaved = () => {
     setSelectedReservation(null);
+    fetchReservations();
   };
 
   const handleReservationDeleted = () => {
     setSelectedReservation(null);
+    fetchReservations();
   };
 
   return (
-    <div className={styles.mainContent}>
-      <div className={styles.sectionsContainer}>
-        <div className={styles.section}>
-          <h2>Select Restaurant</h2>
-          <RestaurantSelector
-            onSelectRestaurant={handleRestaurantSelect}
-            selectedRestaurant={selectedRestaurant}
-          />
+    <div className={styles.reservationsContainer}>
+      <div className={styles.selectors}>
+        <div className={styles.selectorSection}>
+          <RestaurantSelector />
         </div>
-        <div className={styles.section}>
-          <h2>Select User</h2>
-          <UserSelector
-            onSelectUser={handleUserSelect}
-            selectedUser={selectedUser}
-          />
-        </div>
-        <div className={styles.section}>
-          <h2>Reservations</h2>
-          <ReservationList
-            restaurantId={selectedRestaurant?.id}
-            onSelectReservation={handleReservationSelect}
-            selectedReservation={selectedReservation}
-          />
-        </div>
-        <div className={styles.section}>
-          <h2>New Reservation</h2>
-          <ReservationForm
-            selectedRestaurant={selectedRestaurant}
-            selectedUser={selectedUser}
-            selectedReservation={selectedReservation}
-            onReservationSaved={handleReservationSaved}
-            onReservationDeleted={handleReservationDeleted}
-          />
+        <div className={styles.selectorSection}>
+          <UserSelector />
         </div>
       </div>
+      
+      {selectedRestaurant && (
+        <div className={styles.content}>
+          <div className={styles.listSection}>
+            {loading ? (
+              <div>Loading reservations...</div>
+            ) : error ? (
+              <div className={styles.error}>{error}</div>
+            ) : (
+              <ReservationList reservations={reservations} />
+            )}
+          </div>
+          <div className={styles.formSection}>
+            <ReservationForm
+              selectedReservation={selectedReservation}
+              onReservationSaved={handleReservationSaved}
+              onReservationDeleted={handleReservationDeleted}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

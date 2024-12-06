@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './RestaurantForm.module.css';
-import { Card, Title, Button } from '../../common';
+import { Card, Title, Button, Input, Select } from '../../common';
 
 const initialFormState = {
   name: '',
@@ -8,11 +8,13 @@ const initialFormState = {
   phone: '',
   cuisine: 'italian',
   status: 'open',
-  rating: '4.0'
+  rating: '4.0',
+  zones: ['main'] // Zona por defecto
 };
 
 const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDeleted }) => {
   const [formData, setFormData] = useState(initialFormState);
+  const [newZone, setNewZone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -24,7 +26,8 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
         phone: selectedRestaurant.phone || '',
         cuisine: selectedRestaurant.cuisine || 'italian',
         status: selectedRestaurant.status || 'open',
-        rating: selectedRestaurant.rating?.toString() || '4.0'
+        rating: selectedRestaurant.rating?.toString() || '4.0',
+        zones: selectedRestaurant.zones || ['main'] // Asegurarse de que siempre haya al menos 'main'
       });
     } else {
       setFormData(initialFormState);
@@ -36,6 +39,25 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
     setFormData(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handleAddZone = (e) => {
+    e.preventDefault();
+    if (newZone.trim() && !formData.zones.includes(newZone.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        zones: [...prev.zones, newZone.trim()]
+      }));
+      setNewZone('');
+    }
+  };
+
+  const handleRemoveZone = (zoneToRemove) => {
+    if (zoneToRemove === 'main') return; // No permitir eliminar la zona 'main'
+    setFormData(prev => ({
+      ...prev,
+      zones: prev.zones.filter(zone => zone !== zoneToRemove)
     }));
   };
 
@@ -113,10 +135,9 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
       <Title>{selectedRestaurant ? 'Edit Restaurant' : 'Add Restaurant'}</Title>
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
-          <label htmlFor="name">Name</label>
-          <input
+          <Input
+            label="Name"
             type="text"
-            id="name"
             name="name"
             value={formData.name}
             onChange={handleChange}
@@ -125,10 +146,9 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="address">Address</label>
-          <input
+          <Input
+            label="Address"
             type="text"
-            id="address"
             name="address"
             value={formData.address}
             onChange={handleChange}
@@ -137,10 +157,9 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="phone">Phone</label>
-          <input
+          <Input
+            label="Phone"
             type="text"
-            id="phone"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
@@ -149,47 +168,77 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="cuisine">Cuisine</label>
-          <select
-            id="cuisine"
+          <Select
+            label="Cuisine"
             name="cuisine"
             value={formData.cuisine}
             onChange={handleChange}
+            required
           >
             <option value="italian">Italian</option>
             <option value="japanese">Japanese</option>
             <option value="spanish">Spanish</option>
             <option value="french">French</option>
             <option value="indian">Indian</option>
-          </select>
+          </Select>
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="status">Status</label>
-          <select
-            id="status"
+          <Select
+            label="Status"
             name="status"
             value={formData.status}
             onChange={handleChange}
+            required
           >
             <option value="open">Open</option>
             <option value="closed">Closed</option>
-          </select>
+          </Select>
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="rating">Rating</label>
-          <input
+          <Input
+            label="Rating"
             type="number"
-            id="rating"
             name="rating"
             value={formData.rating}
             onChange={handleChange}
-            step="0.1"
+            required
             min="0"
             max="5"
-            required
+            step="0.1"
           />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Zones</label>
+          <div className={styles.zonesList}>
+            {formData.zones.map(zone => (
+              <div key={zone} className={styles.zoneTag}>
+                {zone}
+                {zone !== 'main' && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveZone(zone)}
+                    className={styles.removeZone}
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className={styles.addZone}>
+            <Input
+              type="text"
+              value={newZone}
+              onChange={(e) => setNewZone(e.target.value)}
+              placeholder="New zone name"
+            />
+            <Button type="button" onClick={handleAddZone}>
+              Add Zone
+            </Button>
+          </div>
         </div>
 
         {error && <div className={styles.error}>{error}</div>}

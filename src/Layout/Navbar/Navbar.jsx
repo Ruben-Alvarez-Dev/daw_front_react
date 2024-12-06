@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './Navbar.module.css';
-import ContextInfo from '../../components/specific/navbar/ContextInfo';
+import { useAppContext } from '../../context/AppContext';
 
 const Navbar = () => {
+  const { selectedRestaurant, activeZone, selectedTable, selectedUser } = useAppContext();
+
+  useEffect(() => {
+    console.log('Navbar - Selected User changed:', selectedUser);
+  }, [selectedUser]);
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.logo}>
         Restaurant Manager
       </div>
-      <div className={styles.contextInfo}>
-        <ContextInfo />
-      </div>
-      <div className={styles.actions}>
-        {/* Aquí puedes añadir botones de acción si los necesitas */}
+      <div className={styles.info}>
+        {selectedRestaurant && (
+          <span className={styles.infoItem}>
+            <span className={styles.label}>Restaurant:</span>
+            <span className={styles.value}>{selectedRestaurant.name}</span>
+          </span>
+        )}
+        {activeZone && (
+          <span className={styles.infoItem}>
+            <span className={styles.label}>Zone:</span>
+            <span className={styles.value}>{activeZone}</span>
+          </span>
+        )}
+        {selectedTable && (
+          <span className={styles.infoItem}>
+            <span className={styles.label}>Table:</span>
+            <span className={styles.value}>{selectedTable.number}</span>
+          </span>
+        )}
+        {selectedUser && (
+          <span className={styles.infoItem}>
+            <span className={styles.label}>User:</span>
+            <span className={styles.value}>{selectedUser.name}</span>
+          </span>
+        )}
       </div>
     </nav>
   );

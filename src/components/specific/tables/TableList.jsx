@@ -1,100 +1,115 @@
 import React, { useState, useEffect } from 'react';
 import styles from './TableList.module.css';
-import { Card, Title } from '../../common';
+import { Title } from '../../common';
+import { useAppContext } from '../../../context/AppContext';
 
-const TableList = ({ restaurantId, zones = [], selectedZone, onZoneChange, onSelectTable }) => {
+const TableList = ({ onSelectTable }) => {
+  const { selectedRestaurant, activeZone, setActiveZone, selectedTable, setSelectedTable } = useAppContext();
   const [tables, setTables] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (restaurantId) {
+    if (selectedRestaurant) {
       fetchTables();
+      setActiveZone(''); // Reset to empty (All zones) when restaurant changes
+    } else {
+      setTables([]);
     }
-  }, [restaurantId, selectedZone]);
+  }, [selectedRestaurant]);
 
   const fetchTables = async () => {
+    if (!selectedRestaurant) return;
+    
     try {
       setLoading(true);
-      let url = `/api/tables?restaurantId=${restaurantId}`;
-      if (selectedZone !== 'all') {
-        url += `&zone=${selectedZone}`;
-      }
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      setError(null);
+      const response = await fetch(`http://localhost:3000/tables?restaurantId=${selectedRestaurant.id}`);
+      if (!response.ok) throw new Error('Failed to fetch tables');
       const data = await response.json();
       setTables(data);
-      setError(null);
-    } catch (err) {
-      console.error('Error fetching tables:', err);
+    } catch (error) {
+      console.error('Error fetching tables:', error);
       setError('Failed to load tables');
     } finally {
       setLoading(false);
     }
   };
 
-  const renderStatus = (status) => {
-    const statusClass = status === 'available' ? styles.statusAvailable : styles.statusOccupied;
-    return <span className={`${styles.status} ${statusClass}`}>{status}</span>;
+  if (!selectedRestaurant) {
+    return <div className={styles.message}>Please select a restaurant</div>;
+  }
+
+  const availableZones = selectedRestaurant.zones || ['main'];
+
+  // Filter tables based on active zone
+  const filteredTables = !activeZone 
+    ? tables 
+    : tables.filter(table => table.zone === activeZone);
+
+  const handleZoneChange = (e) => {
+    const newZone = e.target.value;
+    setActiveZone(newZone === 'all' ? '' : newZone);
   };
 
-  if (loading) {
-    return <div>Loading tables...</div>;
-  }
-
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
-  }
+  const handleTableClick = (table) => {
+    setSelectedTable(table);
+    if (onSelectTable) {
+      onSelectTable(table);
+    }
+  };
 
   return (
-    <Card>
+    <div className={styles.container}>
       <Title>Tables</Title>
+      
       <div className={styles.zoneSelector}>
-        <select 
-          value={selectedZone} 
-          onChange={(e) => onZoneChange(e.target.value)}
+        <label htmlFor="zone-select">Zone:</label>
+        <select
+          id="zone-select"
+          value={activeZone || 'all'}
+          onChange={handleZoneChange}
           className={styles.select}
         >
           <option value="all">All Zones</option>
-          {zones.map((zone) => (
+          {availableZones.map(zone => (
             <option key={zone} value={zone}>
-              {zone}
+              {zone.charAt(0).toUpperCase() + zone.slice(1)}
             </option>
           ))}
         </select>
       </div>
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Number</th>
-              <th>Zone</th>
-              <th>Capacity</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tables.map((table) => (
-              <tr
+
+      {loading && <div className={styles.message}>Loading tables...</div>}
+      {error && <div className={styles.error}>{error}</div>}
+      
+      {!loading && !error && (
+        <div className={styles.tableList}>
+          {filteredTables.length === 0 ? (
+            <div className={styles.message}>No tables found</div>
+          ) : (
+            filteredTables.map(table => (
+              <div
                 key={table.id}
-                onClick={() => onSelectTable(table)}
-                className={styles.tableRow}
+                className={`${styles.tableCard} ${selectedTable?.id === table.id ? styles.selected : ''}`}
+                onClick={() => handleTableClick(table)}
               >
-                <td>{table.number}</td>
-                <td>{table.zone}</td>
-                <td>{table.capacity}</td>
-                <td>{renderStatus(table.status)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className={styles.totalCount}>
-        Total Tables: {tables.length}
-      </div>
-    </Card>
+                <div className={styles.tableHeader}>
+                  <h3>Table {table.number}</h3>
+                  <span className={`${styles.status} ${styles[table.status]}`}>
+                    {table.status}
+                  </span>
+                </div>
+                <div className={styles.tableInfo}>
+                  <p>Zone: {table.zone}</p>
+                  <p>Capacity: {table.capacity}</p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

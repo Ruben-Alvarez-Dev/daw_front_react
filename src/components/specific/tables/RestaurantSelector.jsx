@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styles from './RestaurantSelector.module.css';
 import { Card, Title } from '../../common';
+import { useAppContext } from '../../../context/AppContext';
 
-const RestaurantSelector = ({ onSelectRestaurant, selectedRestaurant }) => {
+const RestaurantSelector = () => {
+  const { selectedRestaurant, setSelectedRestaurant } = useAppContext();
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -29,6 +31,10 @@ const RestaurantSelector = ({ onSelectRestaurant, selectedRestaurant }) => {
     }
   };
 
+  const handleRestaurantClick = (restaurant) => {
+    setSelectedRestaurant(restaurant);
+  };
+
   if (loading) {
     return <div>Loading restaurants...</div>;
   }
@@ -47,7 +53,7 @@ const RestaurantSelector = ({ onSelectRestaurant, selectedRestaurant }) => {
             className={`${styles.restaurantItem} ${
               selectedRestaurant?.id === restaurant.id ? styles.selected : ''
             }`}
-            onClick={() => onSelectRestaurant(restaurant)}
+            onClick={() => handleRestaurantClick(restaurant)}
           >
             <div className={styles.restaurantName}>{restaurant.name}</div>
             <div className={styles.restaurantInfo}>
