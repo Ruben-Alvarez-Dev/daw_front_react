@@ -1,20 +1,23 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
+import styles from './Layout.module.css';
 import Navbar from './Navbar/Navbar';
 import Aside from './Aside/Aside';
-import Display from './Display/Display';
-import Footer from './Footer/Footer';
-import styles from './Layout.module.css';
+import { AppProvider } from '../context/AppContext';
 
 const Layout = () => {
   return (
-    <div className={styles.layout}>
-      <Navbar />
-      <div className={styles.mainContent}>
-        <Aside />
-        <Display />
+    <AppProvider>
+      <div className={styles.layout}>
+        <Navbar />
+        <div className={styles.content}>
+          <Aside />
+          <main className={styles.main}>
+            <Outlet />
+          </main>
+        </div>
       </div>
-      <Footer />
-    </div>
+    </AppProvider>
   );
 };
 

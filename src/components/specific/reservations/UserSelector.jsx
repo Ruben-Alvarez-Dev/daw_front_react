@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styles from './UserSelector.module.css';
 import { Card, Title } from '../../common';
+import { AppContext } from '../../../context/AppContext';
 
 const UserSelector = ({ onSelectUser, selectedUser }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { setSelectedUser } = useContext(AppContext);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,6 +35,14 @@ const UserSelector = ({ onSelectUser, selectedUser }) => {
     fetchUsers();
   }, []);
 
+  const handleUserSelect = (user) => {
+    if (onSelectUser) {
+      onSelectUser(user);
+    }
+    // Actualizar el contexto global
+    setSelectedUser(user);
+  };
+
   if (loading) {
     return <div className={styles.message}>Loading users...</div>;
   }
@@ -52,15 +62,11 @@ const UserSelector = ({ onSelectUser, selectedUser }) => {
         {users.map((user) => (
           <div
             key={user.id}
-            onClick={() => onSelectUser(user)}
-            className={`${styles.userItem} ${
-              selectedUser?.id === user.id ? styles.selected : ''
-            }`}
+            className={`${styles.userItem} ${selectedUser?.id === user.id ? styles.selected : ''}`}
+            onClick={() => handleUserSelect(user)}
           >
             <div className={styles.userName}>{user.name}</div>
-            <div className={styles.userInfo}>
-              <span className={styles.userEmail}>{user.email}</span>
-            </div>
+            <div className={styles.userEmail}>{user.email}</div>
           </div>
         ))}
       </div>

@@ -4,10 +4,15 @@ import RestaurantSelector from '../tables/RestaurantSelector';
 import UserSelector from './UserSelector';
 import ReservationList from './ReservationList';
 import ReservationForm from './ReservationForm';
+import { useAppContext } from '../../../context/AppContext';
 
 const Reservations = () => {
-  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const {
+    selectedRestaurant,
+    setSelectedRestaurant,
+    selectedUser,
+    setSelectedUser
+  } = useAppContext();
   const [selectedReservation, setSelectedReservation] = useState(null);
 
   const handleRestaurantSelect = (restaurant) => {

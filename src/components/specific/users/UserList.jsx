@@ -53,6 +53,9 @@ const UserList = ({ onSelectUser }) => {
     }
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <div className={styles.userListContainer}>
       <Card
@@ -63,19 +66,7 @@ const UserList = ({ onSelectUser }) => {
         }
         card-body={
           <div className={styles.body}>
-            {loading ? (
-              <p>Loading users...</p>
-            ) : error ? (
-              <>
-                <p className={styles.error}>{error}</p>
-                {response && (
-                  <div className={styles.debug}>
-                    <h4>Response Details:</h4>
-                    <pre>{JSON.stringify(response, null, 2)}</pre>
-                  </div>
-                )}
-              </>
-            ) : (
+            <div className={styles.userList}>
               <table className={styles.table}>
                 <thead>
                   <tr>
@@ -102,7 +93,7 @@ const UserList = ({ onSelectUser }) => {
                   ))}
                 </tbody>
               </table>
-            )}
+            </div>
           </div>
         }
         card-footer={

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import styles from './Aside.module.css';
 
 const menuItems = [
-  { path: '/', name: 'Dashboard', icon: '📊' },
+  { path: '/dashboard', name: 'Dashboard', icon: '📊' },
   { path: '/users', name: 'Users', icon: '👥' },
   { path: '/restaurants', name: 'Restaurants', icon: '🍽️' },
   { path: '/tables', name: 'Tables', icon: '🪑' },
