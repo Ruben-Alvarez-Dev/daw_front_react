@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './UserSelector.module.css';
+import './UserSelector.css';
 import { Card, Title } from '../../common';
 import { useAppContext } from '../../../context/AppContext';
 
@@ -38,29 +38,29 @@ const UserSelector = () => {
   };
 
   if (loading) {
-    return <div className={styles.message}>Loading users...</div>;
+    return <div className="message">Loading users...</div>;
   }
 
   if (error) {
-    return <div className={styles.error}>{error}</div>;
+    return <div className="error">{error}</div>;
   }
 
   if (users.length === 0) {
-    return <div className={styles.message}>No users found</div>;
+    return <div className="message">No users found</div>;
   }
 
   return (
     <Card>
       <Title>Select User</Title>
-      <div className={styles.userList}>
+      <div className="user-list">
         {users.map((user) => (
           <div
             key={user.id}
-            className={`${styles.userItem} ${selectedUser?.id === user.id ? styles.selected : ''}`}
+            className={`user-item ${selectedUser?.id === user.id ? 'selected' : ''}`}
             onClick={() => handleUserSelect(user)}
           >
-            <div className={styles.userName}>{user.name}</div>
-            <div className={styles.userEmail}>{user.email}</div>
+            <div className="user-name">{user.name}</div>
+            <div className="user-email">{user.email}</div>
           </div>
         ))}
       </div>

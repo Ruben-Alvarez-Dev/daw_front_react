@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from './Select.module.css';
+import './Select.css';
 
 const Select = ({ label, children, ...props }) => {
   return (
-    <div className={styles.selectContainer}>
-      {label && <label className={styles.label}>{label}</label>}
-      <select className={styles.select} {...props}>
+    <div className="select-container">
+      {label && <label className="select-label">{label}</label>}
+      <select className="select" {...props}>
         {children}
       </select>
     </div>

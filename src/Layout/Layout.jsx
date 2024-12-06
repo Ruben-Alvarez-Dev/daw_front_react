@@ -3,15 +3,15 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
 import Aside from './Aside/Aside';
 import Footer from './Footer/Footer';
-import styles from './Layout.module.css';
+import './Layout.css';
 
 const Layout = () => {
   return (
-    <div className={styles.layout}>
+    <div className="layout">
       <Navbar />
-      <div className={styles.container}>
+      <div className="layout-container">
         <Aside />
-        <main className={styles.main}>
+        <main className="layout-main">
           <Outlet />
         </main>
       </div>

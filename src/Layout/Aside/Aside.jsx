@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from './Aside.module.css';
+import './Aside.css';
 
 const menuItems = [
   { path: '/dashboard', name: 'Dashboard', icon: '📊' },
@@ -13,18 +13,18 @@ const menuItems = [
 
 const Aside = () => {
   return (
-    <aside className={styles.aside}>
-      <nav className={styles.nav}>
+    <aside className="aside">
+      <nav className="aside-nav">
         {menuItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `${styles.navLink} ${isActive ? styles.active : ''}`
+              `nav-link ${isActive ? 'active' : ''}`
             }
           >
-            <span className={styles.icon}>{item.icon}</span>
-            <span className={styles.text}>{item.name}</span>
+            <span className="nav-icon">{item.icon}</span>
+            <span className="nav-text">{item.name}</span>
           </NavLink>
         ))}
       </nav>

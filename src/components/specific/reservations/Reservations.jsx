@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Reservations.module.css';
+import './Reservations.css';
 import RestaurantSelector from '../restaurants/RestaurantSelector';
 import UserSelector from './UserSelector';
 import ReservationList from './ReservationList';
@@ -58,28 +58,28 @@ const Reservations = () => {
   };
 
   return (
-    <div className={styles.reservationsContainer}>
-      <div className={styles.selectors}>
-        <div className={styles.selectorSection}>
+    <div className="reservations-container">
+      <div className="selectors">
+        <div className="selector-section">
           <RestaurantSelector />
         </div>
-        <div className={styles.selectorSection}>
+        <div className="selector-section">
           <UserSelector />
         </div>
       </div>
       
       {selectedRestaurant && (
-        <div className={styles.content}>
-          <div className={styles.listSection}>
+        <div className="content">
+          <div className="list-section">
             {loading ? (
               <div>Loading reservations...</div>
             ) : error ? (
-              <div className={styles.error}>{error}</div>
+              <div className="error">{error}</div>
             ) : (
               <ReservationList reservations={reservations} />
             )}
           </div>
-          <div className={styles.formSection}>
+          <div className="form-section">
             <ReservationForm
               selectedReservation={selectedReservation}
               onReservationSaved={handleReservationSaved}

@@ -1,0 +1,14 @@
+.restaurants {
+  padding: 1rem;
+}
+
+.restaurants-page {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+}
+
+.restaurants-page h1 {
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}

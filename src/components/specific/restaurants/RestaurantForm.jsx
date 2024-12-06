@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './RestaurantForm.module.css';
+import './RestaurantForm.css';
 import { Card, Title, Button, Input, Select } from '../../common';
 
 const initialFormState = {
@@ -27,7 +27,7 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
         cuisine: selectedRestaurant.cuisine || 'italian',
         status: selectedRestaurant.status || 'open',
         rating: selectedRestaurant.rating?.toString() || '4.0',
-        zones: selectedRestaurant.zones || ['main'] // Asegurarse de que siempre haya al menos 'main'
+        zones: selectedRestaurant.zones || ['main']
       });
     } else {
       setFormData(initialFormState);
@@ -54,7 +54,7 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
   };
 
   const handleRemoveZone = (zoneToRemove) => {
-    if (zoneToRemove === 'main') return; // No permitir eliminar la zona 'main'
+    if (zoneToRemove === 'main') return;
     setFormData(prev => ({
       ...prev,
       zones: prev.zones.filter(zone => zone !== zoneToRemove)
@@ -133,8 +133,8 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
   return (
     <Card>
       <Title>{selectedRestaurant ? 'Edit Restaurant' : 'Add Restaurant'}</Title>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.formGroup}>
+      <form onSubmit={handleSubmit} className="restaurant-form">
+        <div className="form-group">
           <Input
             label="Name"
             type="text"
@@ -145,7 +145,7 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
           />
         </div>
 
-        <div className={styles.formGroup}>
+        <div className="form-group">
           <Input
             label="Address"
             type="text"
@@ -156,7 +156,7 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
           />
         </div>
 
-        <div className={styles.formGroup}>
+        <div className="form-group">
           <Input
             label="Phone"
             type="text"
@@ -167,7 +167,7 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
           />
         </div>
 
-        <div className={styles.formGroup}>
+        <div className="form-group">
           <Select
             label="Cuisine"
             name="cuisine"
@@ -183,7 +183,7 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
           </Select>
         </div>
 
-        <div className={styles.formGroup}>
+        <div className="form-group">
           <Select
             label="Status"
             name="status"
@@ -196,7 +196,7 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
           </Select>
         </div>
 
-        <div className={styles.formGroup}>
+        <div className="form-group">
           <Input
             label="Rating"
             type="number"
@@ -210,17 +210,17 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
           />
         </div>
 
-        <div className={styles.formGroup}>
+        <div className="form-group">
           <label>Zones</label>
-          <div className={styles.zonesList}>
+          <div className="zones-list">
             {formData.zones.map(zone => (
-              <div key={zone} className={styles.zoneTag}>
+              <div key={zone} className="zone-tag">
                 {zone}
                 {zone !== 'main' && (
                   <button
                     type="button"
                     onClick={() => handleRemoveZone(zone)}
-                    className={styles.removeZone}
+                    className="remove-zone"
                   >
                     ×
                   </button>
@@ -228,7 +228,7 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
               </div>
             ))}
           </div>
-          <div className={styles.addZone}>
+          <div className="add-zone">
             <Input
               type="text"
               value={newZone}
@@ -241,13 +241,13 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
           </div>
         </div>
 
-        {error && <div className={styles.error}>{error}</div>}
+        {error && <div className="error">{error}</div>}
 
-        <div className={styles.buttonGroup}>
+        <div className="button-group">
           <Button 
             type="submit" 
             disabled={loading}
-            className={styles.updateButton}
+            className="update-button"
           >
             {selectedRestaurant ? 'Update Restaurant' : 'Add Restaurant'}
           </Button>
@@ -257,7 +257,7 @@ const RestaurantForm = ({ selectedRestaurant, onRestaurantSaved, onRestaurantDel
               type="button"
               onClick={handleDelete}
               disabled={loading}
-              className={styles.deleteButton}
+              className="delete-button"
             >
               Delete Restaurant
             </Button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Tables.module.css';
+import './Tables.css';
 import { useAppContext } from '../../../context/AppContext';
 import { Card } from '../../common';
 import TableList from './TableList';
@@ -38,19 +38,19 @@ const Tables = () => {
   };
 
   return (
-    <div className={styles.tablesContainer}>
-      <div className={styles.mainContent}>
-        <Card className={styles.leftSection}>
+    <div className="tables-container">
+      <div className="tables-main-content">
+        <Card className="tables-left-section">
           <RestaurantSelector />
         </Card>
 
-        <Card className={styles.centerSection}>
+        <Card className="tables-center-section">
           {selectedRestaurant ? (
             <div>
               <select 
                 value={activeZone} 
                 onChange={(e) => setActiveZone(e.target.value)}
-                className={styles.zoneSelector}
+                className="zone-selector"
               >
                 <option value="">All Zones</option>
                 {zones.map((zone) => (
@@ -72,7 +72,7 @@ const Tables = () => {
           )}
         </Card>
 
-        <Card className={styles.rightSection}>
+        <Card className="tables-right-section">
           <TableForm
             restaurantId={selectedRestaurant?.id}
             table={selectedTable}

@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from './List.module.css';
+import './List.css';
 
 const List = ({ items, renderItem, className = '' }) => {
   return (
-    <ul className={`${styles.list} ${className}`}>
+    <ul className={`list ${className}`}>
       {items.map((item, index) => (
-        <li key={index} className={styles.listItem}>
+        <li key={index} className="list-item">
           {renderItem ? renderItem(item) : item}
         </li>
       ))}

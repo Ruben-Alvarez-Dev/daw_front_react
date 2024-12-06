@@ -1,10 +1,10 @@
 import React from 'react';
 import RestaurantsComponent from '../../components/specific/restaurants/Restaurants';
-import styles from './Restaurants.module.css';
+import './Restaurants.css';
 
 const RestaurantsPage = () => {
   return (
-    <div className={styles.restaurantsPage}>
+    <div className="restaurants-page">
       <h1>Gestión de Restaurantes</h1>
       <RestaurantsComponent />
     </div>

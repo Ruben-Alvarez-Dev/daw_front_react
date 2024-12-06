@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './TableList.module.css';
+import './TableList.css';
 import { Title } from '../../common';
 import { useAppContext } from '../../../context/AppContext';
 
@@ -37,7 +37,7 @@ const TableList = ({ onSelectTable }) => {
   };
 
   if (!selectedRestaurant) {
-    return <div className={styles.message}>Please select a restaurant</div>;
+    return <div className="table-message">Please select a restaurant</div>;
   }
 
   const availableZones = selectedRestaurant.zones || ['main'];
@@ -60,16 +60,16 @@ const TableList = ({ onSelectTable }) => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className="table-list-container">
       <Title>Tables</Title>
       
-      <div className={styles.zoneSelector}>
+      <div className="table-zone-selector">
         <label htmlFor="zone-select">Zone:</label>
         <select
           id="zone-select"
           value={activeZone || 'all'}
           onChange={handleZoneChange}
-          className={styles.select}
+          className="table-select"
         >
           <option value="all">All Zones</option>
           {availableZones.map(zone => (
@@ -80,27 +80,27 @@ const TableList = ({ onSelectTable }) => {
         </select>
       </div>
 
-      {loading && <div className={styles.message}>Loading tables...</div>}
-      {error && <div className={styles.error}>{error}</div>}
+      {loading && <div className="table-message">Loading tables...</div>}
+      {error && <div className="table-error">{error}</div>}
       
       {!loading && !error && (
-        <div className={styles.tableList}>
+        <div className="table-grid">
           {filteredTables.length === 0 ? (
-            <div className={styles.message}>No tables found</div>
+            <div className="table-message">No tables found</div>
           ) : (
             filteredTables.map(table => (
               <div
                 key={table.id}
-                className={`${styles.tableCard} ${selectedTable?.id === table.id ? styles.selected : ''}`}
+                className={`table-card ${selectedTable?.id === table.id ? 'selected' : ''}`}
                 onClick={() => handleTableClick(table)}
               >
-                <div className={styles.tableHeader}>
+                <div className="table-card-header">
                   <h3>Table {table.number}</h3>
-                  <span className={`${styles.status} ${styles[table.status]}`}>
+                  <span className={`table-status status-${table.status}`}>
                     {table.status}
                   </span>
                 </div>
-                <div className={styles.tableInfo}>
+                <div className="table-info">
                   <p>Zone: {table.zone}</p>
                   <p>Capacity: {table.capacity}</p>
                 </div>

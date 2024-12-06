@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Title, Select } from '../../common';
 import { useAppContext } from '../../../context/AppContext';
-import styles from './RestaurantSelector.module.css';
+import './RestaurantSelector.css';
 
 const RestaurantSelector = () => {
   const { selectedRestaurant, setSelectedRestaurant } = useAppContext();
@@ -38,15 +38,15 @@ const RestaurantSelector = () => {
   };
 
   return (
-    <div className={styles.selectorContainer}>
+    <div className="selector-container">
       <Title>Restaurant</Title>
       
       {loading ? (
-        <div className={styles.message}>Loading restaurants...</div>
+        <div className="selector-message">Loading restaurants...</div>
       ) : error ? (
-        <div className={styles.error}>{error}</div>
+        <div className="selector-error">{error}</div>
       ) : (
-        <div className={styles.selectWrapper}>
+        <div className="select-wrapper">
           <Select
             value={selectedRestaurant?.id || ''}
             onChange={handleRestaurantChange}

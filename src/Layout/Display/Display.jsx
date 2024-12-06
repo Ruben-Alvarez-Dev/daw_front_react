@@ -6,11 +6,11 @@ import RestaurantsPage from '../../views/Restaurants/Restaurants';
 import Tables from '../../views/Tables/Tables';
 import Reservations from '../../views/Reservations/Reservations';
 import Settings from '../../views/Settings/Settings';
-import styles from './Display.module.css';
+import './Display.css';
 
 const Display = () => {
   return (
-    <main className={styles.display}>
+    <main className="display">
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />

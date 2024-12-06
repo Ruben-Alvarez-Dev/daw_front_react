@@ -1,9 +1,9 @@
 import React from 'react'
-import styles from './Dashboard.module.css'
+import './Dashboard.css'
 
 const Dashboard = () => {
   return (
-    <div className={styles.dashboard}>
+    <div className="dashboard">
       <h1>Dashboard</h1>
     </div>
   )

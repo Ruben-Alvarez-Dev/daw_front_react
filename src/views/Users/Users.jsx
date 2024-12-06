@@ -1,10 +1,10 @@
 import React from 'react'
 import UsersComponent from '../../components/specific/users/Users'
-import styles from './Users.module.css'
+import './Users.css'
 
 const Users = () => {
   return (
-    <div className={styles.users}>
+    <div className="users">
       <UsersComponent />
     </div>
   )

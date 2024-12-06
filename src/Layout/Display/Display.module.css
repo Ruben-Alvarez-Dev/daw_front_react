@@ -1,6 +1,0 @@
-.display {
-  flex: 1;
-  padding: 1rem;
-  overflow-y: auto;
-  background-color: var(--bg-primary);
-}

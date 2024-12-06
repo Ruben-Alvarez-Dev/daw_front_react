@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './ReservationList.module.css';
+import './ReservationList.css';
 import { Card } from '../../common';
 import { useAppContext } from '../../../context/AppContext';
 
@@ -13,7 +13,7 @@ const ReservationList = ({ reservations }) => {
 
   if (!reservations?.length) {
     return (
-      <div className={styles.message}>
+      <div className="message">
         No reservations found for this restaurant
       </div>
     );
@@ -36,30 +36,28 @@ const ReservationList = ({ reservations }) => {
   };
 
   return (
-    <div className={styles.reservationList}>
+    <div className="reservation-list">
       {reservations.map((reservation) => {
         const { date, time } = formatDateTime(reservation.date);
         return (
           <Card
             key={reservation.id}
             onClick={() => handleReservationClick(reservation)}
-            className={`${styles.reservationCard} ${
-              selectedReservation?.id === reservation.id ? styles.selected : ''
-            }`}
+            className={`reservation-card ${selectedReservation?.id === reservation.id ? 'selected' : ''}`}
           >
-            <div className={styles.reservationInfo}>
-              <div className={styles.dateTime}>
+            <div className="reservation-info">
+              <div className="date-time">
                 <span>{date}</span>
                 <span>{time}</span>
               </div>
-              <div className={styles.details}>
+              <div className="details">
                 <span>Guests: {reservation.numberOfGuests}</span>
-                <span className={`${styles.status} ${styles[reservation.status]}`}>
+                <span className={`status ${reservation.status}`}>
                   {reservation.status}
                 </span>
               </div>
               {reservation.notes && (
-                <div className={styles.notes}>{reservation.notes}</div>
+                <div className="notes">{reservation.notes}</div>
               )}
             </div>
           </Card>

@@ -1,0 +1,23 @@
+.selector-container {
+  padding: 1rem;
+}
+
+.select-wrapper {
+  margin-top: 1rem;
+}
+
+.selector-message {
+  text-align: center;
+  padding: 1rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+}
+
+.selector-error {
+  color: var(--error);
+  background-color: var(--error-light);
+  padding: 1rem;
+  text-align: center;
+  border-radius: 4px;
+  margin-top: 1rem;
+}

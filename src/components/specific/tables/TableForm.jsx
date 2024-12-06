@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './TableForm.module.css';
+import './TableForm.css';
 import { Title, Button, Input, Select } from '../../common';
 import { useAppContext } from '../../../context/AppContext';
 
@@ -132,19 +132,19 @@ const TableForm = ({ table, onSaved }) => {
 
   if (!selectedRestaurant) {
     return (
-      <div className={styles.formContainer}>
+      <div className="table-form-container">
         <Title>Table Form</Title>
-        <p className={styles.noRestaurant}>Please select a restaurant first</p>
+        <p className="table-no-restaurant">Please select a restaurant first</p>
       </div>
     );
   }
 
   return (
-    <div className={styles.formContainer}>
+    <div className="table-form-container">
       <Title>{table ? 'Edit Table' : 'New Table'}</Title>
       
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.formGroup}>
+      <form onSubmit={handleSubmit} className="table-form">
+        <div className="table-form-group">
           <Input
             label="Table Number"
             type="text"
@@ -155,7 +155,7 @@ const TableForm = ({ table, onSaved }) => {
           />
         </div>
 
-        <div className={styles.formGroup}>
+        <div className="table-form-group">
           <Input
             label="Capacity"
             type="number"
@@ -167,7 +167,7 @@ const TableForm = ({ table, onSaved }) => {
           />
         </div>
 
-        <div className={styles.formGroup}>
+        <div className="table-form-group">
           <Input
             label="Zone"
             type="text"
@@ -179,7 +179,7 @@ const TableForm = ({ table, onSaved }) => {
           />
         </div>
 
-        <div className={styles.formGroup}>
+        <div className="table-form-group">
           <Select
             label="Status"
             name="status"
@@ -193,13 +193,14 @@ const TableForm = ({ table, onSaved }) => {
           </Select>
         </div>
 
-        {error && <div className={styles.error}>{error}</div>}
+        {error && <div className="table-form-error">{error}</div>}
 
-        <div className={styles.buttonGroup}>
+        <div className="table-button-group">
           <Button
             type="submit"
             disabled={loading}
             primary
+            className="table-update-button"
           >
             {loading ? 'Saving...' : (table ? 'Update Table' : 'Create Table')}
           </Button>
@@ -210,6 +211,7 @@ const TableForm = ({ table, onSaved }) => {
               onClick={handleDelete}
               disabled={loading}
               danger
+              className="table-delete-button"
             >
               {loading ? 'Deleting...' : 'Delete Table'}
             </Button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './RestaurantSelector.module.css';
+import './RestaurantSelector.css';
 import { Card, Title } from '../../common';
 import { useAppContext } from '../../../context/AppContext';
 
@@ -40,25 +40,25 @@ const RestaurantSelector = () => {
   }
 
   if (error) {
-    return <div className={styles.error}>{error}</div>;
+    return <div className="table-restaurant-error">{error}</div>;
   }
 
   return (
     <Card>
       <Title>Select Restaurant</Title>
-      <div className={styles.restaurantList}>
+      <div className="table-restaurant-list">
         {restaurants.map((restaurant) => (
           <div
             key={restaurant.id}
-            className={`${styles.restaurantItem} ${
-              selectedRestaurant?.id === restaurant.id ? styles.selected : ''
+            className={`table-restaurant-item ${
+              selectedRestaurant?.id === restaurant.id ? 'table-restaurant-selected' : ''
             }`}
             onClick={() => handleRestaurantClick(restaurant)}
           >
-            <div className={styles.restaurantName}>{restaurant.name}</div>
-            <div className={styles.restaurantInfo}>
-              <span className={styles.cuisine}>{restaurant.cuisine}</span>
-              <span className={`${styles.status} ${styles[restaurant.status]}`}>
+            <div className="table-restaurant-name">{restaurant.name}</div>
+            <div className="table-restaurant-info">
+              <span className="table-restaurant-cuisine">{restaurant.cuisine}</span>
+              <span className={`table-restaurant-status status-${restaurant.status}`}>
                 {restaurant.status}
               </span>
             </div>

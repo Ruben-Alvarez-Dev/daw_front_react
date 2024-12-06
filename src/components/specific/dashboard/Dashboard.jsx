@@ -1,18 +1,18 @@
 import React from 'react';
-import styles from './Dashboard.module.css';
+import './Dashboard.css';
 import { useAppContext } from '../../../context/AppContext';
 
 const Dashboard = () => {
   const { selectedRestaurant, activeZone } = useAppContext();
 
   return (
-    <div className={styles.dashboard}>
-      <h1 className={styles.title}>Dashboard</h1>
+    <div className="dashboard">
+      <h1 className="dashboard-title">Dashboard</h1>
       
-      <div className={styles.summary}>
-        <div className={styles.card}>
+      <div className="dashboard-summary">
+        <div className="dashboard-card">
           <h3>Current Context</h3>
-          <div className={styles.info}>
+          <div className="dashboard-info">
             <p>
               <strong>Restaurant:</strong>{' '}
               {selectedRestaurant ? selectedRestaurant.name : 'None selected'}

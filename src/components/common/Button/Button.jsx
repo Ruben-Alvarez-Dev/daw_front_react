@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Button.module.css';
+import './Button.css';
 
 const Button = ({ 
   children, 
@@ -14,7 +14,7 @@ const Button = ({
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`${styles.button} ${styles[variant]} ${className}`}
+      className={`button ${variant} ${className}`}
     >
       {children}
     </button>

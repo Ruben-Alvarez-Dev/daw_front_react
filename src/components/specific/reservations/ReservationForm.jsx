@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import styles from './ReservationForm.module.css';
-import { Card, Title } from '../../common';
+import './ReservationForm.css';
+import { Card, Title, Button } from '../../common';
 
 const RESERVATION_STATUS = {
-  PENDING: 'Pending',
-  CONFIRMED: 'Confirmed',
-  CANCELLED: 'Cancelled'
+  PENDING: 'pending',
+  CONFIRMED: 'confirmed',
+  CANCELLED: 'cancelled'
 };
 
 const ReservationForm = ({ selectedReservation, onReservationSaved, onReservationDeleted }) => {
@@ -83,10 +83,10 @@ const ReservationForm = ({ selectedReservation, onReservationSaved, onReservatio
       return;
     }
 
-    try {
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
 
+    try {
       const localDate = new Date(`${formData.date}T${formData.time}`);
       const utcDate = new Date(localDate.getTime() + (localDate.getTimezoneOffset() * 60000));
 
@@ -152,96 +152,97 @@ const ReservationForm = ({ selectedReservation, onReservationSaved, onReservatio
 
   return (
     <Card>
-      <Title>{selectedReservation ? 'Edit Reservation' : 'New Reservation'}</Title>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.formGroup}>
-          <label htmlFor="date">Date:</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={formData.date}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+      <div className="form-container">
+        <Title>{selectedReservation ? 'Edit Reservation' : 'New Reservation'}</Title>
+        
+        <form onSubmit={handleSubmit} className="form">
+          {error && <div className="error">{error}</div>}
+          
+          <div className="form-group">
+            <label htmlFor="date">Date</label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value={formData.date}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="time">Time:</label>
-          <input
-            type="time"
-            id="time"
-            name="time"
-            value={formData.time}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="time">Time</label>
+            <input
+              type="time"
+              id="time"
+              name="time"
+              value={formData.time}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="numberOfGuests">Number of Guests:</label>
-          <input
-            type="number"
-            id="numberOfGuests"
-            name="numberOfGuests"
-            value={formData.numberOfGuests}
-            onChange={handleInputChange}
-            min="1"
-            required
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="numberOfGuests">Number of Guests</label>
+            <input
+              type="number"
+              id="numberOfGuests"
+              name="numberOfGuests"
+              value={formData.numberOfGuests}
+              onChange={handleInputChange}
+              min="1"
+              required
+            />
+          </div>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="status">Status:</label>
-          <select
-            id="status"
-            name="status"
-            value={formData.status}
-            onChange={handleInputChange}
-            required
-          >
-            {Object.values(RESERVATION_STATUS).map(status => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="form-group">
+            <label htmlFor="status">Status</label>
+            <select
+              id="status"
+              name="status"
+              value={formData.status}
+              onChange={handleInputChange}
+              required
+            >
+              <option value={RESERVATION_STATUS.PENDING}>Pending</option>
+              <option value={RESERVATION_STATUS.CONFIRMED}>Confirmed</option>
+              <option value={RESERVATION_STATUS.CANCELLED}>Cancelled</option>
+            </select>
+          </div>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="notes">Notes:</label>
-          <textarea
-            id="notes"
-            name="notes"
-            value={formData.notes}
-            onChange={handleInputChange}
-            placeholder="Add any special requests or notes here..."
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="notes">Notes</label>
+            <textarea
+              id="notes"
+              name="notes"
+              value={formData.notes}
+              onChange={handleInputChange}
+              rows="3"
+            />
+          </div>
 
-        {error && <div className={styles.error}>{error}</div>}
-
-        <div className={styles.buttonGroup}>
-          <button
-            type="submit"
-            className={styles.submitButton}
-            disabled={loading}
-          >
-            {loading ? 'Saving...' : selectedReservation ? 'Update' : 'Create'}
-          </button>
-
-          {selectedReservation && (
-            <button
-              type="button"
-              className={styles.deleteButton}
-              onClick={handleDelete}
+          <div className="button-group">
+            <Button
+              type="submit"
+              className="submit-button"
               disabled={loading}
             >
-              {loading ? 'Deleting...' : 'Delete'}
-            </button>
-          )}
-        </div>
-      </form>
+              {loading ? 'Saving...' : (selectedReservation ? 'Update' : 'Create')}
+            </Button>
+
+            {selectedReservation && (
+              <Button
+                type="button"
+                className="delete-button"
+                onClick={handleDelete}
+                disabled={loading}
+              >
+                Delete
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
     </Card>
   );
 };

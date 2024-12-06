@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Restaurants.module.css';
+import './Restaurants.css';
 import RestaurantList from './RestaurantList';
 import RestaurantForm from './RestaurantForm';
 import { useAppContext } from '../../../context/AppContext';
@@ -43,22 +43,22 @@ const Restaurants = () => {
   };
 
   if (loading) {
-    return <div className={styles.message}>Loading restaurants...</div>;
+    return <div className="restaurants-message">Loading restaurants...</div>;
   }
 
   if (error) {
-    return <div className={styles.error}>{error}</div>;
+    return <div className="restaurants-error">{error}</div>;
   }
 
   return (
-    <div className={styles.restaurantsContainer}>
-      <div className={styles.listSection}>
+    <div className="restaurants-container">
+      <div className="list-section">
         <RestaurantList 
           restaurants={restaurants}
           onSelectRestaurant={() => {}} 
         />
       </div>
-      <div className={styles.formSection}>
+      <div className="form-section">
         <RestaurantForm
           selectedRestaurant={selectedRestaurant}
           onRestaurantSaved={handleRestaurantSaved}

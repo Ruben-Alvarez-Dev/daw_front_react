@@ -1,9 +1,9 @@
 import React from 'react';
-import styles from './Subtitle.module.css';
+import './Subtitle.css';
 
 const Subtitle = ({ children, className = '' }) => {
   return (
-    <h2 className={`${styles.subtitle} ${className}`}>
+    <h2 className={`subtitle ${className}`}>
       {children}
     </h2>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styles from './Navbar.module.css';
+import './Navbar.css';
 import { useAppContext } from '../../context/AppContext';
 
 const Navbar = () => {
@@ -10,33 +10,33 @@ const Navbar = () => {
   }, [selectedUser]);
 
   return (
-    <nav className={styles.navbar}>
-      <div className={styles.logo}>
+    <nav className="navbar">
+      <div className="navbar-logo">
         Restaurant Manager
       </div>
-      <div className={styles.info}>
+      <div className="navbar-info">
         {selectedRestaurant && (
-          <span className={styles.infoItem}>
-            <span className={styles.label}>Restaurant:</span>
-            <span className={styles.value}>{selectedRestaurant.name}</span>
+          <span className="navbar-info-item">
+            <span className="navbar-label">Restaurant:</span>
+            <span className="navbar-value">{selectedRestaurant.name}</span>
           </span>
         )}
         {activeZone && (
-          <span className={styles.infoItem}>
-            <span className={styles.label}>Zone:</span>
-            <span className={styles.value}>{activeZone}</span>
+          <span className="navbar-info-item">
+            <span className="navbar-label">Zone:</span>
+            <span className="navbar-value">{activeZone}</span>
           </span>
         )}
         {selectedTable && (
-          <span className={styles.infoItem}>
-            <span className={styles.label}>Table:</span>
-            <span className={styles.value}>{selectedTable.number}</span>
+          <span className="navbar-info-item">
+            <span className="navbar-label">Table:</span>
+            <span className="navbar-value">{selectedTable.number}</span>
           </span>
         )}
         {selectedUser && (
-          <span className={styles.infoItem}>
-            <span className={styles.label}>User:</span>
-            <span className={styles.value}>{selectedUser.name}</span>
+          <span className="navbar-info-item">
+            <span className="navbar-label">User:</span>
+            <span className="navbar-value">{selectedUser.name}</span>
           </span>
         )}
       </div>

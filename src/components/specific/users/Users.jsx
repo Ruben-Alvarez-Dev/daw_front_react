@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Users.module.css';
+import './Users.css';
 import UserList from './UserList';
 import UserForm from './UserForm';
 import { useAppContext } from '../../../context/AppContext';
@@ -46,11 +46,11 @@ const Users = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className={styles.usersContainer}>
-      <div className={styles.listSection}>
+    <div className="users-container">
+      <div className="list-section">
         <UserList users={users} />
       </div>
-      <div className={styles.formSection}>
+      <div className="form-section">
         <UserForm
           selectedUser={selectedUser}
           onUserSaved={handleUserSaved}
