@@ -1,12 +1,16 @@
-import React from 'react'
-import styles from './Reservations.module.css'
+import React from 'react';
+import styles from './Reservations.module.css';
+import Reservations from '../../components/specific/reservations/Reservations';
 
-const Reservations = () => {
+const ReservationsView = () => {
   return (
-    <div className={styles.reservations}>
+    <div className={styles.reservationsView}>
       <h1>Reservations</h1>
+      <div className={styles.reservationsContainer}>
+        <Reservations />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Reservations
+export default ReservationsView;

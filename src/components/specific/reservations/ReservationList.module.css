@@ -1,0 +1,97 @@
+.reservationList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.reservationCard {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.reservationCard:hover {
+  transform: translateX(4px);
+  background-color: var(--bg-hover);
+}
+
+.reservationCard.selected {
+  border-color: var(--primary);
+  background-color: var(--bg-selected);
+}
+
+.reservationInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dateTime {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.status {
+  text-transform: capitalize;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.status.pending {
+  background-color: var(--warning-bg);
+  color: var(--warning-text);
+}
+
+.status.confirmed {
+  background-color: var(--success-bg);
+  color: var(--success-text);
+}
+
+.status.cancelled {
+  background-color: var(--error-bg);
+  color: var(--error-text);
+}
+
+.notes {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.message {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 1rem;
+  font-size: 0.875rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error {
+  text-align: center;
+  color: var(--error);
+  padding: 1rem;
+  font-size: 0.875rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

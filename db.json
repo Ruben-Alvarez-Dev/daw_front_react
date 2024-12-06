@@ -1,124 +1,93 @@
 {
-  "users": [
-    {
-      "id": "2",
-      "name": "Jane Smith1111",
-      "email": "jane.smith@example.com",
-      "role": "manager",
-      "status": "active",
-      "lastLogin": "2024-01-14T15:45:00Z"
-    },
-    {
-      "id": "3",
-      "name": "Bob Wilson",
-      "email": "bob.wilson@example.com",
-      "role": "staff",
-      "status": "inactive",
-      "lastLogin": "2024-01-10T11:20:00Z"
-    },
-    {
-      "id": "4",
-      "name": "Alice Brown",
-      "email": "alice.brown@example.com",
-      "role": "staff",
-      "status": "active",
-      "lastLogin": "2024-01-15T09:15:00Z"
-    },
-    {
-      "id": "5",
-      "name": "Charlie Davis",
-      "email": "charlie.davis@example.com",
-      "role": "manager",
-      "status": "active",
-      "lastLogin": "2024-01-14T16:30:00Z"
-    }
-  ],
   "restaurants": [
     {
-      "id": "2",
+      "id": 1,
       "name": "Sushi Master",
-      "address": "45 Ocean Avenue",
-      "phone": "+34 666 789 012",
-      "cuisine": "japanese",
-      "status": "open",
-      "rating": 4.8,
-      "zones": ["Terraza", "Sala Principal", "Sala VIP", "Barra"]
+      "cuisine": "Japanese",
+      "status": "Open"
     },
     {
-      "id": "3",
+      "id": 2,
       "name": "El Rincón",
-      "address": "78 Tapas Street",
-      "phone": "+34 666 345 678",
-      "cuisine": "spanish",
-      "status": "open",
-      "rating": 4.2,
-      "zones": ["Interior", "Terraza", "Bodega"]
+      "cuisine": "Spanish",
+      "status": "Open"
     },
     {
-      "id": "4",
+      "id": 3,
       "name": "Le Bistrot",
-      "address": "90 French Quarter",
-      "phone": "+34 666 901 234",
-      "cuisine": "french",
-      "status": "closed",
-      "rating": 4.6,
-      "zones": ["Salon Principal", "Terrasse", "Cave"]
+      "cuisine": "French",
+      "status": "Closed"
     },
     {
-      "id": "5",
+      "id": 4,
       "name": "Taj Mahal",
-      "address": "34 Spice Road",
-      "phone": "+34 666 567 890",
-      "cuisine": "indian",
-      "status": "closed",
-      "rating": 4.3,
-      "zones": ["Main Hall", "Garden", "Private Room"]
+      "cuisine": "Indian",
+      "status": "Closed"
     },
     {
-      "id": "a083",
+      "id": 5,
       "name": "r2f",
-      "address": "f24f4",
-      "phone": "1212",
-      "cuisine": "italian",
-      "status": "open",
-      "rating": 4,
-      "zones": []
-    },
-    {
-      "id": "2b13",
-      "name": "2r2",
-      "address": "214f2f",
-      "phone": "123g42g",
-      "cuisine": "italian",
-      "status": "open",
-      "rating": 4,
-      "zones": []
+      "cuisine": "Italian",
+      "status": "Open"
     }
   ],
-  "tables": [
+  "users": [
     {
-      "id": "1",
-      "restaurantId": "2",
-      "zone": "Terraza",
-      "number": 1,
-      "capacity": 4,
-      "status": "available"
+      "id": 1,
+      "name": "John Doe",
+      "email": "john.doe@example.com"
     },
     {
-      "id": "2",
-      "restaurantId": "2",
-      "zone": "Sala Principal",
-      "number": 1,
-      "capacity": 6,
-      "status": "occupied"
+      "id": 2,
+      "name": "Jane Smith1111",
+      "email": "jane.smith@example.com"
     },
     {
-      "id": "3",
-      "restaurantId": "3",
-      "zone": "Interior",
-      "number": 1,
-      "capacity": 2,
-      "status": "available"
+      "id": 3,
+      "name": "Bob Wilson",
+      "email": "bob.wilson@example.com"
+    },
+    {
+      "id": 4,
+      "name": "Alice Brown",
+      "email": "alice.brown@example.com"
+    },
+    {
+      "id": 5,
+      "name": "Charlie Davis",
+      "email": "charlie.davis@example.com"
+    }
+  ],
+  "reservations": [
+    {
+      "id": 1,
+      "restaurantId": 1,
+      "userId": 2,
+      "date": "2024-03-15",
+      "time": "19:00",
+      "guests": 4,
+      "status": "pending",
+      "notes": "Window seat preferred"
+    },
+    {
+      "id": 2,
+      "restaurantId": 1,
+      "userId": 3,
+      "date": "2024-03-16",
+      "time": "20:30",
+      "guests": 2,
+      "status": "confirmed",
+      "notes": "Anniversary dinner"
+    },
+    {
+      "id": "52d2",
+      "date": "2025-01-05",
+      "time": "08:30",
+      "guests": "5",
+      "notes": "252",
+      "restaurantId": 1,
+      "userId": 1,
+      "status": "pending"
     }
   ]
 }

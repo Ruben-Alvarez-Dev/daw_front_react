@@ -14,7 +14,7 @@ const RestaurantSelector = ({ onSelectRestaurant, selectedRestaurant }) => {
   const fetchRestaurants = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/restaurants');
+      const response = await fetch('http://localhost:3000/restaurants');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
