@@ -1,3 +1,10 @@
-.tables {
+.tablesView {
   padding: 1rem;
+  height: 100%;
+}
+
+.tablesView h1 {
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-size: 1.5rem;
 }

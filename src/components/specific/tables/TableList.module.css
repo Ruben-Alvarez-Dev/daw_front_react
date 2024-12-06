@@ -1,0 +1,80 @@
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tableRow {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.tableRow:hover {
+  background-color: var(--bg-hover);
+}
+
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.statusAvailable {
+  background-color: var(--success-light);
+  color: var(--success);
+}
+
+.statusOccupied {
+  background-color: var(--error-light);
+  color: var(--error);
+}
+
+.error {
+  color: var(--error);
+  padding: 1rem;
+  text-align: center;
+}
+
+.totalCount {
+  margin-top: 1rem;
+  text-align: right;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.zoneSelector {
+  margin: 1rem 0;
+}
+
+.select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--primary);
+}

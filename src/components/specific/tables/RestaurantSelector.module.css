@@ -1,0 +1,64 @@
+.restaurantList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.restaurantItem {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.restaurantItem:hover {
+  background-color: var(--bg-hover);
+}
+
+.selected {
+  border-color: var(--primary);
+  background-color: var(--primary-light);
+}
+
+.restaurantName {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.restaurantInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.cuisine {
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.open {
+  background-color: var(--success-light);
+  color: var(--success);
+}
+
+.closed {
+  background-color: var(--error-light);
+  color: var(--error);
+}
+
+.error {
+  color: var(--error);
+  padding: 1rem;
+  text-align: center;
+}
