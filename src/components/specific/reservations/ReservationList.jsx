@@ -1,7 +1,7 @@
 import React from 'react';
 import './ReservationList.css';
 import { Card, Title } from '../../common';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../../contexts/AppContext';
 
 const ReservationList = ({ reservations }) => {
   const { selectedReservation, setSelectedReservation } = useAppContext();

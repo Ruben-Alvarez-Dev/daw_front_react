@@ -1,95 +1,8 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import { useAppContext } from './AppContext';
+import { userService } from '../services/userService';
 
 const UserContext = createContext();
-
-export const UserProvider = ({ children }) => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [userFilters, setUserFilters] = useState({
-    role: '',
-    status: '',
-    search: ''
-  });
-
-  const fetchUsers = useCallback(async () => {
-    try {
-      // TODO: Implement API call
-      const response = await fetch('/api/users');
-      const data = await response.json();
-      setUsers(data);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    }
-  }, []);
-
-  const createUser = useCallback(async (userData) => {
-    try {
-      // TODO: Implement API call
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        body: JSON.stringify(userData),
-      });
-      const newUser = await response.json();
-      setUsers(prev => [...prev, newUser]);
-      return newUser;
-    } catch (error) {
-      console.error('Error creating user:', error);
-      throw error;
-    }
-  }, []);
-
-  const updateUser = useCallback(async (userId, userData) => {
-    try {
-      // TODO: Implement API call
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'PUT',
-        body: JSON.stringify(userData),
-      });
-      const updatedUser = await response.json();
-      setUsers(prev => prev.map(user => 
-        user.id === userId ? updatedUser : user
-      ));
-      return updatedUser;
-    } catch (error) {
-      console.error('Error updating user:', error);
-      throw error;
-    }
-  }, []);
-
-  const deleteUser = useCallback(async (userId) => {
-    try {
-      // TODO: Implement API call
-      await fetch(`/api/users/${userId}`, {
-        method: 'DELETE',
-      });
-      setUsers(prev => prev.filter(user => user.id !== userId));
-      if (selectedUser?.id === userId) {
-        setSelectedUser(null);
-      }
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      throw error;
-    }
-  }, [selectedUser?.id]);
-
-  const filterUsers = useCallback((filters) => {
-    setUserFilters(prev => ({ ...prev, ...filters }));
-  }, []);
-
-  const value = {
-    users,
-    selectedUser,
-    userFilters,
-    setSelectedUser,
-    fetchUsers,
-    createUser,
-    updateUser,
-    deleteUser,
-    filterUsers,
-  };
-
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
-};
 
 export const useUserContext = () => {
   const context = useContext(UserContext);
@@ -97,6 +10,111 @@ export const useUserContext = () => {
     throw new Error('useUserContext must be used within a UserProvider');
   }
   return context;
+};
+
+export const UserProvider = ({ children }) => {
+  // Estado local
+  const [selectedUser, setSelectedUser] = useState(null);
+  
+  // Estado de usuarios
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Obtener setSelectedUser del AppContext para mantener sincronizado
+  const { setSelectedUser: setAppSelectedUser, notifyError, notifySuccess } = useAppContext();
+
+  // Función para mantener sincronizado el usuario seleccionado en ambos contextos
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
+    setAppSelectedUser(user);
+  };
+
+  // Users functions
+  const loadUsers = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await userService.getAll();
+      setUsers(data);
+    } catch (err) {
+      setError(err.message);
+      notifyError('Error loading users: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [notifyError]);
+
+  const createUser = useCallback(async (userData) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const newUser = await userService.create(userData);
+      setUsers(prev => [...prev, newUser]);
+      notifySuccess('User created successfully');
+      return newUser;
+    } catch (err) {
+      setError(err.message);
+      notifyError('Error creating user: ' + err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [notifySuccess, notifyError]);
+
+  const updateUser = useCallback(async (id, userData) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const updatedUser = await userService.update(id, userData);
+      setUsers(prev => prev.map(user => user.id === id ? updatedUser : user));
+      notifySuccess('User updated successfully');
+      return updatedUser;
+    } catch (err) {
+      setError(err.message);
+      notifyError('Error updating user: ' + err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [notifySuccess, notifyError]);
+
+  const deleteUser = useCallback(async (id) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await userService.remove(id);
+      setUsers(prev => prev.filter(user => user.id !== id));
+      notifySuccess('User deleted successfully');
+    } catch (err) {
+      setError(err.message);
+      notifyError('Error deleting user: ' + err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [notifySuccess, notifyError]);
+
+  const value = {
+    // Estado
+    selectedUser,
+    users,
+    loading,
+    error,
+    
+    // Funciones
+    setSelectedUser: handleSelectUser,
+    loadUsers,
+    createUser,
+    updateUser,
+    deleteUser
+  };
+
+  return (
+    <UserContext.Provider value={value}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export default UserContext;

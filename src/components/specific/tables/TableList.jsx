@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './TableList.css';
 import { Title, Card } from '../../common';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../../contexts/AppContext';
 
 const TableList = ({ onSelectTable }) => {
   const { selectedRestaurant, activeZone, setActiveZone, selectedTable, setSelectedTable } = useAppContext();

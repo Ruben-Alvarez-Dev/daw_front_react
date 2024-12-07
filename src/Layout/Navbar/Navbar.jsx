@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './Navbar.css';
-import { useAppContext } from '../../context/AppContext';
+import { useAppContext } from '../../contexts/AppContext';
 
 const Navbar = () => {
   const { selectedRestaurant, activeZone, selectedTable, selectedUser } = useAppContext();

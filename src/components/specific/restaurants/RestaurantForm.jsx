@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Select, Button } from '../../common';
 import { useRestaurantContext } from '../../../contexts/RestaurantContext';
+import * as restaurantService from '../../../services/restaurantService';
 import './RestaurantForm.css';
 
-const RestaurantForm = () => {
-  const { 
-    selectedRestaurant, 
-    createRestaurant, 
-    updateRestaurant, 
-    deleteRestaurant,
-    setSelectedRestaurant
-  } = useRestaurantContext();
+const RestaurantForm = ({ onRestaurantSaved }) => {
+  const { selectedRestaurant, setSelectedRestaurant } = useRestaurantContext();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -45,59 +42,51 @@ const RestaurantForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     try {
       if (selectedRestaurant) {
-        await updateRestaurant(selectedRestaurant.id, formData);
+        await restaurantService.updateRestaurant(selectedRestaurant.id, formData);
       } else {
-        await createRestaurant(formData);
+        await restaurantService.createRestaurant(formData);
       }
       setSelectedRestaurant(null);
-      setFormData({
-        name: '',
-        address: '',
-        phone: '',
-        status: 'open',
-        cuisine: '',
-        rating: 0,
-        zones: []
-      });
-    } catch (error) {
-      console.error('Error saving restaurant:', error);
+      onRestaurantSaved?.();
+    } catch (err) {
+      setError(err.message);
+      console.error('Error saving restaurant:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    if (selectedRestaurant && window.confirm('Are you sure you want to delete this restaurant?')) {
-      try {
-        await deleteRestaurant(selectedRestaurant.id);
-        setSelectedRestaurant(null);
-        setFormData({
-          name: '',
-          address: '',
-          phone: '',
-          status: 'open',
-          cuisine: '',
-          rating: 0,
-          zones: []
-        });
-      } catch (error) {
-        console.error('Error deleting restaurant:', error);
-      }
+    if (!selectedRestaurant || !window.confirm('Are you sure you want to delete this restaurant?')) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await restaurantService.deleteRestaurant(selectedRestaurant.id);
+      setSelectedRestaurant(null);
+      onRestaurantSaved?.();
+    } catch (err) {
+      setError(err.message);
+      console.error('Error deleting restaurant:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleCancel = () => {
     setSelectedRestaurant(null);
-    setFormData({
-      name: '',
-      address: '',
-      phone: '',
-      status: 'open',
-      cuisine: '',
-      rating: 0,
-      zones: []
-    });
   };
+
+  if (loading) return <div className="loading">Saving...</div>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
     <form onSubmit={handleSubmit} className="restaurant-form">
@@ -155,15 +144,15 @@ const RestaurantForm = () => {
       />
       
       <div className="form-buttons">
-        <Button type="submit" variant="primary">
+        <Button type="submit" variant="primary" disabled={loading}>
           {selectedRestaurant ? 'Update' : 'Create'} Restaurant
         </Button>
         {selectedRestaurant && (
           <>
-            <Button type="button" variant="danger" onClick={handleDelete}>
+            <Button type="button" variant="danger" onClick={handleDelete} disabled={loading}>
               Delete
             </Button>
-            <Button type="button" variant="secondary" onClick={handleCancel}>
+            <Button type="button" variant="secondary" onClick={handleCancel} disabled={loading}>
               Cancel
             </Button>
           </>

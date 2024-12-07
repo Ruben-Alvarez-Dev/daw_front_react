@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './TableForm.css';
 import { Title, Button, Input, Select, Card } from '../../common';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../../contexts/AppContext';
 
 const TableForm = ({ table, onSaved }) => {
   const { selectedRestaurant, selectedZone } = useAppContext();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Tables.css';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../../contexts/AppContext';
 import { Card, Title } from '../../common';
 import TableList from './TableList';
 import TableForm from './TableForm';

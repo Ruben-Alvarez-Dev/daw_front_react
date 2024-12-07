@@ -1,5 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { RestaurantProvider } from './contexts/RestaurantContext';
+import { UserProvider } from './contexts/UserContext';
 import Layout from './Layout/Layout';
 import Users from './components/specific/users/Users';
 import RestaurantList from './components/specific/restaurants/RestaurantList';
@@ -9,8 +10,8 @@ import Settings from './components/specific/settings/Settings';
 
 function App() {
   return (
-    <RestaurantProvider>
-      <Router>
+    <UserProvider>
+      <RestaurantProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/users" replace />} />
@@ -22,8 +23,8 @@ function App() {
             <Route path="*" element={<Navigate to="/users" replace />} />
           </Route>
         </Routes>
-      </Router>
-    </RestaurantProvider>
+      </RestaurantProvider>
+    </UserProvider>
   );
 }
 

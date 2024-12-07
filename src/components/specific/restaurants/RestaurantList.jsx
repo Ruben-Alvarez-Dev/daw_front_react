@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Title } from '../../common';
 import { useRestaurantContext } from '../../../contexts/RestaurantContext';
+import * as restaurantService from '../../../services/restaurantService';
 import RestaurantForm from './RestaurantForm';
 import './RestaurantList.css';
 
 const RestaurantList = () => {
-  const { 
-    restaurants, 
-    selectedRestaurant, 
-    setSelectedRestaurant, 
-    loading, 
-    error 
-  } = useRestaurantContext();
+  // Estado local del componente
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Estado compartido del contexto
+  const { selectedRestaurant, setSelectedRestaurant } = useRestaurantContext();
+
+  // Cargar restaurantes al montar el componente
+  useEffect(() => {
+    const loadRestaurants = async () => {
+      setLoading(true);
+      try {
+        const data = await restaurantService.getRestaurants();
+        setRestaurants(data);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error loading restaurants:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRestaurants();
+  }, []);
 
   const handleRestaurantClick = (restaurant) => {
     setSelectedRestaurant(restaurant);
@@ -64,15 +84,10 @@ const RestaurantList = () => {
       </Card>
       <Card>
         <Title>Restaurant Details</Title>
-        <RestaurantForm 
-          selectedRestaurant={selectedRestaurant}
-          onRestaurantSaved={() => {
-            setSelectedRestaurant(null);
-          }}
-          onRestaurantDeleted={() => {
-            setSelectedRestaurant(null);
-          }}
-        />
+        <RestaurantForm onRestaurantSaved={() => {
+          // Recargar la lista cuando se guarde un restaurante
+          restaurantService.getRestaurants().then(setRestaurants);
+        }} />
       </Card>
     </div>
   );

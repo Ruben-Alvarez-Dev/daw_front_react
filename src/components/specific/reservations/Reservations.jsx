@@ -3,7 +3,7 @@ import './Reservations.css';
 import UserSelector from './UserSelector';
 import ReservationList from './ReservationList';
 import ReservationForm from './ReservationForm';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../../contexts/AppContext';
 
 const Reservations = () => {
   const { 

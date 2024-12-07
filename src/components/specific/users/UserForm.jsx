@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './UserForm.css';
 import { Card, Title, Input, Button } from '../../common';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../../contexts/AppContext';
 
 const UserForm = ({ onSave, onDelete, onCancel }) => {
   const { selectedUser } = useAppContext();

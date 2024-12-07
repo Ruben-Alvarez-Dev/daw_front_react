@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ReservationForm.css';
 import { Card, Title, Button, Input, Select } from '../../common';
-import { useAppContext } from '../../../context/AppContext';
+import { useAppContext } from '../../../contexts/AppContext';
 
 const RESERVATION_STATUS = {
   PENDING: 'pending',

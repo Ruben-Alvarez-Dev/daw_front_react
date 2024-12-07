@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Card, Title } from '../../common';
-import { useAppContext } from '../../../context/AppContext';
+import { useUserContext } from '../../../contexts/UserContext';
 import './UserList.css';
 
 const UserList = () => {
-  const { users, selectedUser, setSelectedUser, loadUsers, loading, error } = useAppContext();
+  const { users, selectedUser, setSelectedUser, loadUsers, loading, error } = useUserContext();
 
   useEffect(() => {
     loadUsers();
