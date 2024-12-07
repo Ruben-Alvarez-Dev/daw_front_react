@@ -12,30 +12,49 @@
   min-height: 200px;
 }
 
-.table {
+.users-container {
+  display: flex;
+  gap: 2rem;
+  height: 100%;
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
+  padding: 2rem;
 }
 
-.table th,
-.table td {
+.users-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-primary);
+}
+
+.users-table th,
+.users-table td {
   padding: 0.75rem;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
 }
 
-.table th {
+.users-table th {
   font-weight: 600;
-  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  background-color: var(--background-secondary);
 }
 
-.table-row {
+.users-table tbody tr {
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.table-row:hover {
-  background-color: var(--bg-hover);
+.users-table tbody tr:hover {
+  background-color: var(--background-hover);
+}
+
+.users-table tbody tr.selected {
+  background-color: var(--primary-transparent);
 }
 
 .status {
@@ -55,12 +74,59 @@
   color: var(--error-text);
 }
 
+.status-pending {
+  background-color: var(--warning-bg);
+  color: var(--warning-text);
+}
+
+.status-unknown {
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+}
+
 .role {
   text-transform: capitalize;
 }
 
-.error {
+.list-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-button {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-button:hover {
+  background-color: var(--primary-dark);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+.error-message {
   color: var(--error-text);
+  background-color: var(--error-bg);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+}
+
+.users-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-secondary);
 }
 
 .footer {
@@ -68,10 +134,4 @@
   justify-content: flex-end;
   color: var(--text-secondary);
   font-size: 0.9rem;
-}
-
-.no-users {
-  text-align: center;
-  padding: 2rem;
-  color: var(--text-secondary);
 }

@@ -4,6 +4,11 @@
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Permite que el card se encoja si es necesario */
+  max-width: 100%; /* Evita que el card se expanda más allá de su contenedor */
 }
 
 .card-header {
@@ -13,6 +18,7 @@
   margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border-color);
+  min-height: fit-content;
 }
 
 .card-header .title {
@@ -25,10 +31,15 @@
 .card-body {
   padding: 1rem 0;
   color: var(--text-secondary);
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0; /* Permite que el scroll funcione correctamente */
+  width: 100%; /* Asegura que el contenido respete el ancho del card */
 }
 
 .card-footer {
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
-  margin-top: 1rem;
+  margin-top: auto;
+  min-height: fit-content;
 }

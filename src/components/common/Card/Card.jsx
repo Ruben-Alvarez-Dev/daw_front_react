@@ -8,7 +8,7 @@ const Card = ({
   'card-footer': footer 
 }) => {
   return (
-    <div className={'card'}>
+    <div className={`card ${className}`}>
       {children || (
         <>
           {header && <div className="card-header">{header}</div>}
