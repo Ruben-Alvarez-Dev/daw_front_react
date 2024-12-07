@@ -1,128 +1,88 @@
-.restaurant-list {
+.two-columns-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   padding: 1rem;
+  height: calc(100vh - 120px);
 }
 
-.restaurant-card {
-  background-color: var(--background-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+/* Estilos de la tabla */
+.restaurants-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.restaurant-card:hover {
-  border-color: var(--accent-color);
-  transform: translateY(-2px);
+.restaurants-table th,
+.restaurants-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.restaurant-card.selected {
-  border-color: var(--accent-color);
-  background-color: var(--background-elevated);
-}
-
-.restaurant-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.restaurant-name {
-  font-size: 1.2rem;
+.restaurants-table th {
+  background-color: var(--table-header-bg);
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0;
 }
 
-.restaurant-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
+.restaurants-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.restaurant-address, 
-.restaurant-phone, 
-.restaurant-cuisine, 
-.restaurant-rating {
-  margin: 0;
+.restaurants-table tbody tr:hover {
+  background-color: var(--hover-color);
 }
 
-.restaurant-status {
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
+.restaurants-table tr.selected {
+  background-color: var(--selected-color);
+}
+
+/* Estilos para estados */
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
   font-weight: 500;
-  background-color: var(--background-elevated);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
+  display: inline-block;
 }
 
 .status-open {
-  background-color: rgba(46, 204, 113, 0.1);
-  color: #2ecc71;
-  border-color: rgba(46, 204, 113, 0.2);
+  background-color: var(--success-bg);
+  color: var(--success-text);
 }
 
 .status-closed {
-  background-color: rgba(231, 76, 60, 0.1);
-  color: #e74c3c;
-  border-color: rgba(231, 76, 60, 0.2);
+  background-color: var(--error-bg);
+  color: var(--error-text);
 }
 
 .status-temporary {
-  background-color: var(--warning-light);
-  color: var(--warning);
+  background-color: var(--warning-bg);
+  color: var(--warning-text);
 }
 
-.restaurant-zones {
-  margin-top: 1rem;
-}
-
-.zones-label {
-  font-weight: 500;
-  color: #495057;
-  margin-right: 0.5rem;
-}
-
-.zones-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-}
-
-.zone-tag {
-  padding: 0.25rem 0.75rem;
-  background-color: var(--background-elevated);
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-}
-
+/* Estilos para mensajes */
+.loading,
+.error-message,
 .no-restaurants {
-  text-align: center;
-  padding: 2rem;
-  color: var(--text-secondary);
-}
-
-.restaurant-error {
-  color: var(--error);
   padding: 1rem;
   text-align: center;
+  color: var(--text-secondary);
+}
+
+.error-message {
+  color: var(--error-text);
+}
+
+/* Estilos para el footer */
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .total-count {
-  margin-top: 1rem;
-  text-align: right;
-  color: var(--text-secondary);
   font-size: 0.875rem;
+  color: var(--text-secondary);
 }

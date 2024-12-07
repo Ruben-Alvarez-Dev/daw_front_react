@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './Reservations.css';
-import RestaurantSelector from '../restaurants/RestaurantSelector';
 import UserSelector from './UserSelector';
 import ReservationList from './ReservationList';
 import ReservationForm from './ReservationForm';
@@ -59,35 +58,25 @@ const Reservations = () => {
 
   return (
     <div className="reservations-container">
-      <div className="selectors">
-        <div className="selector-section">
-          <RestaurantSelector />
-        </div>
-        <div className="selector-section">
+      <div className="reservations-main-content">
+        <div className="reservations-left-section">
           <UserSelector />
         </div>
-      </div>
-      
-      {selectedRestaurant && (
-        <div className="content">
-          <div className="list-section">
-            {loading ? (
-              <div>Loading reservations...</div>
-            ) : error ? (
-              <div className="error">{error}</div>
-            ) : (
-              <ReservationList reservations={reservations} />
-            )}
-          </div>
-          <div className="form-section">
-            <ReservationForm
-              selectedReservation={selectedReservation}
-              onReservationSaved={handleReservationSaved}
-              onReservationDeleted={handleReservationDeleted}
+        <div className="reservations-right-section">
+          <ReservationList 
+            reservations={reservations}
+            loading={loading}
+            error={error}
+            onSelect={setSelectedReservation}
+          />
+          {selectedRestaurant && selectedUser && (
+            <ReservationForm 
+              reservation={selectedReservation}
+              onSubmitSuccess={fetchReservations}
             />
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

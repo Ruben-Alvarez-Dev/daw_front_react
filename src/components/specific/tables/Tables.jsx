@@ -4,7 +4,6 @@ import { useAppContext } from '../../../context/AppContext';
 import { Card, Title } from '../../common';
 import TableList from './TableList';
 import TableForm from './TableForm';
-import RestaurantSelector from '../restaurants/RestaurantSelector';
 
 const Tables = () => {
   const { selectedRestaurant, activeZone, setActiveZone } = useAppContext();
@@ -41,7 +40,6 @@ const Tables = () => {
     <div className="tables-container">
       <div className="tables-main-content">
         <div className="tables-left-section">
-          <RestaurantSelector />
         </div>
 
         <Card 

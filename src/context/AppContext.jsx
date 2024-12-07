@@ -3,6 +3,31 @@ import { userService } from '../services/users';
 
 const AppContext = createContext();
 
+// Mock data for restaurants
+const mockRestaurants = [
+  {
+    id: 1,
+    name: "Restaurant One",
+    address: "123 Main St",
+    phone: "123-456-7890",
+    status: "open"
+  },
+  {
+    id: 2,
+    name: "Restaurant Two",
+    address: "456 Oak Ave",
+    phone: "098-765-4321",
+    status: "closed"
+  },
+  {
+    id: 3,
+    name: "Restaurant Three",
+    address: "789 Pine Rd",
+    phone: "555-555-5555",
+    status: "temporarily_closed"
+  }
+];
+
 export const useAppContext = () => {
   const context = useContext(AppContext);
   if (!context) {
@@ -12,11 +37,19 @@ export const useAppContext = () => {
 };
 
 export const AppContextProvider = ({ children }) => {
+  // User state
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  
+  // Restaurant state
+  const [restaurants, setRestaurants] = useState(mockRestaurants);
+  const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+  
+  // Common state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // User functions
   const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
@@ -75,16 +108,51 @@ export const AppContextProvider = ({ children }) => {
     }
   }, []);
 
+  // Restaurant functions
+  const createRestaurant = useCallback((restaurantData) => {
+    const newRestaurant = {
+      id: restaurants.length + 1,
+      ...restaurantData
+    };
+    setRestaurants(prev => [...prev, newRestaurant]);
+    setSelectedRestaurant(null);
+  }, [restaurants]);
+
+  const updateRestaurant = useCallback((id, restaurantData) => {
+    setRestaurants(prev => 
+      prev.map(restaurant => 
+        restaurant.id === id ? { ...restaurant, ...restaurantData } : restaurant
+      )
+    );
+    setSelectedRestaurant(null);
+  }, []);
+
+  const deleteRestaurant = useCallback((id) => {
+    setRestaurants(prev => prev.filter(restaurant => restaurant.id !== id));
+    setSelectedRestaurant(null);
+  }, []);
+
   const value = {
+    // User context
     users,
     selectedUser,
-    loading,
-    error,
     setSelectedUser,
     loadUsers,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+
+    // Restaurant context
+    restaurants,
+    selectedRestaurant,
+    setSelectedRestaurant,
+    createRestaurant,
+    updateRestaurant,
+    deleteRestaurant,
+
+    // Common state
+    loading,
+    error
   };
 
   return (
