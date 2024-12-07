@@ -1,6 +1,6 @@
 import React from 'react';
 import './ReservationList.css';
-import { Card } from '../../common';
+import { Card, Title } from '../../common';
 import { useAppContext } from '../../../context/AppContext';
 
 const ReservationList = ({ reservations }) => {
@@ -13,9 +13,11 @@ const ReservationList = ({ reservations }) => {
 
   if (!reservations?.length) {
     return (
-      <div className="message">
-        No reservations found for this restaurant
-      </div>
+      <Card
+        card-header={<Title>Reservations</Title>}
+        card-body={<div className="message">No reservations found for this restaurant</div>}
+        card-footer={<div>Total: 0 reservations</div>}
+      />
     );
   }
 
@@ -35,7 +37,11 @@ const ReservationList = ({ reservations }) => {
     };
   };
 
-  return (
+  const header = (
+    <Title>Reservations List</Title>
+  );
+
+  const body = (
     <div className="reservation-list">
       {reservations.map((reservation) => {
         const { date, time } = formatDateTime(reservation.date);
@@ -64,6 +70,20 @@ const ReservationList = ({ reservations }) => {
         );
       })}
     </div>
+  );
+
+  const footer = (
+    <div className="list-summary">
+      <span>Total: {reservations.length} reservations</span>
+    </div>
+  );
+
+  return (
+    <Card
+      card-header={header}
+      card-body={body}
+      card-footer={footer}
+    />
   );
 };
 

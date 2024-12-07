@@ -33,38 +33,74 @@ const UserSelector = () => {
     fetchUsers();
   }, []);
 
-  const handleUserSelect = (user) => {
-    setSelectedUser(user);
-  };
-
   if (loading) {
-    return <div className="message">Loading users...</div>;
+    return (
+      <Card
+        card-header={<Title>Select User</Title>}
+        card-body={<div className="message">Loading users...</div>}
+        card-footer={<div>Loading...</div>}
+      />
+    );
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return (
+      <Card
+        card-header={<Title>Select User</Title>}
+        card-body={<div className="error">{error}</div>}
+        card-footer={<div>Error loading users</div>}
+      />
+    );
   }
 
   if (users.length === 0) {
-    return <div className="message">No users found</div>;
+    return (
+      <Card
+        card-header={<Title>Select User</Title>}
+        card-body={<div className="message">No users found</div>}
+        card-footer={<div>No users available</div>}
+      />
+    );
   }
 
-  return (
-    <Card>
-      <Title>Select User</Title>
-      <div className="user-list">
-        {users.map((user) => (
-          <div
-            key={user.id}
-            className={`user-item ${selectedUser?.id === user.id ? 'selected' : ''}`}
-            onClick={() => handleUserSelect(user)}
-          >
+  const header = (
+    <Title>Select User</Title>
+  );
+
+  const body = (
+    <div className="user-list">
+      {users.map(user => (
+        <div
+          key={user.id}
+          className={`user-item ${selectedUser?.id === user.id ? 'selected' : ''}`}
+          onClick={() => setSelectedUser(user)}
+        >
+          <div className="user-info">
             <div className="user-name">{user.name}</div>
             <div className="user-email">{user.email}</div>
           </div>
-        ))}
-      </div>
-    </Card>
+          <div className="user-role">{user.role}</div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const footer = (
+    <div className="selector-footer">
+      {selectedUser ? (
+        <div>Selected: {selectedUser.name}</div>
+      ) : (
+        <div>No user selected</div>
+      )}
+    </div>
+  );
+
+  return (
+    <Card
+      card-header={header}
+      card-body={body}
+      card-footer={footer}
+    />
   );
 };
 

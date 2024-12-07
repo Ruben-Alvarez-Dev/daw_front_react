@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './UserForm.css';
 import { Card, Title, Input, Button } from '../../common';
+import { useAppContext } from '../../../context/AppContext';
 
-const UserForm = ({ selectedUser, onUserSaved, onUserDeleted }) => {
+const UserForm = ({ onSave, onDelete }) => {
+  const { selectedUser } = useAppContext();
   const initialFormState = {
     name: '',
     email: '',
@@ -49,26 +51,26 @@ const UserForm = ({ selectedUser, onUserSaved, onUserDeleted }) => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('Failed to save user');
       }
 
-      const savedUser = await response.json();
-      onUserSaved(savedUser);
+      if (onSave) {
+        onSave();
+      }
+      
       if (!selectedUser) {
         setFormData(initialFormState);
       }
     } catch (err) {
-      setError(`Error saving user: ${err.message}`);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!selectedUser || !window.confirm('Are you sure you want to delete this user?')) {
-      return;
-    }
-
+    if (!selectedUser) return;
+    
     setLoading(true);
     setError(null);
 
@@ -78,101 +80,80 @@ const UserForm = ({ selectedUser, onUserSaved, onUserDeleted }) => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('Failed to delete user');
       }
 
-      onUserDeleted(selectedUser.id);
+      if (onDelete) {
+        onDelete();
+      }
+      
       setFormData(initialFormState);
     } catch (err) {
-      setError(`Error deleting user: ${err.message}`);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <Card>
-      <div className="user-form-container">
-        <div className="header">
-          <Title>{selectedUser ? 'Edit User' : 'Create User'}</Title>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="form">
-          {error && <div className="error">{error}</div>}
-          
-          <div className="form-group">
-            <Input
-              label="Name"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+  const header = (
+    <Title>{selectedUser ? 'Edit User' : 'Create New User'}</Title>
+  );
 
-          <div className="form-group">
-            <Input
-              label="Email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="role">Role</label>
-            <select
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="staff">Staff</option>
-              <option value="manager">Manager</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="status">Status</label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
-
-          <div className="form-actions">
-            <Button
-              type="submit"
-              className="submit-button"
-              disabled={loading}
-            >
-              {loading ? 'Saving...' : (selectedUser ? 'Update User' : 'Create User')}
-            </Button>
-
-            {selectedUser && (
-              <Button
-                type="button"
-                className="delete-button"
-                onClick={handleDelete}
-                disabled={loading}
-              >
-                {loading ? 'Deleting...' : 'Delete User'}
-              </Button>
-            )}
-          </div>
-        </form>
+  const body = (
+    <form onSubmit={handleSubmit} className="user-form">
+      <Input
+        label="Name"
+        type="text"
+        name="name"
+        value={formData.name}
+        onChange={handleInputChange}
+        required
+      />
+      <Input
+        label="Email"
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleInputChange}
+        required
+      />
+      <div className="form-group">
+        <label>Role</label>
+        <select name="role" value={formData.role} onChange={handleInputChange}>
+          <option value="staff">Staff</option>
+          <option value="admin">Admin</option>
+        </select>
       </div>
-    </Card>
+      <div className="form-group">
+        <label>Status</label>
+        <select name="status" value={formData.status} onChange={handleInputChange}>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+      {error && <div className="error-message">{error}</div>}
+    </form>
+  );
+
+  const footer = (
+    <div className="form-actions">
+      <Button type="submit" onClick={handleSubmit} disabled={loading}>
+        {selectedUser ? 'Update' : 'Create'}
+      </Button>
+      {selectedUser && (
+        <Button type="button" onClick={handleDelete} disabled={loading} className="delete">
+          Delete
+        </Button>
+      )}
+    </div>
+  );
+
+  return (
+    <Card
+      card-header={header}
+      card-body={body}
+      card-footer={footer}
+    />
   );
 };
 

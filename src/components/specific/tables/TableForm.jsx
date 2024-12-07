@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './TableForm.css';
-import { Title, Button, Input, Select } from '../../common';
+import { Title, Button, Input, Select, Card } from '../../common';
 import { useAppContext } from '../../../context/AppContext';
 
 const TableForm = ({ table, onSaved }) => {
@@ -62,73 +62,131 @@ const TableForm = ({ table, onSaved }) => {
     setLoading(true);
     setError(null);
 
-    const tableData = {
-      ...formData,
-      restaurantId: selectedRestaurant.id,
-      capacity: parseInt(formData.capacity)
-    };
-
     try {
-      const url = table
-        ? `http://localhost:3000/tables/${table.id}`
-        : 'http://localhost:3000/tables';
+      const url = `http://localhost:3000/tables${table ? `/${table.id}` : ''}`;
+      const method = table ? 'PUT' : 'POST';
       
       const response = await fetch(url, {
-        method: table ? 'PUT' : 'POST',
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(tableData),
+        body: JSON.stringify({
+          ...formData,
+          restaurantId: selectedRestaurant.id,
+          capacity: parseInt(formData.capacity)
+        }),
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to ${table ? 'update' : 'create'} table`);
+        throw new Error('Failed to save table');
       }
 
-      onSaved();
+      const savedTable = await response.json();
+      if (onSaved) onSaved(savedTable);
+      
       if (!table) {
-        setFormData({
-          ...initialFormState,
-          zone: selectedZone === 'all' ? '' : selectedZone
-        });
+        setFormData(initialFormState);
       }
     } catch (err) {
-      console.error('Error saving table:', err);
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async () => {
-    if (!table || !window.confirm('Are you sure you want to delete this table?')) {
-      return;
-    }
+  const header = (
+    <Title>{table ? 'Edit Table' : 'Add New Table'}</Title>
+  );
 
-    setLoading(true);
-    setError(null);
+  const body = (
+    <form onSubmit={handleSubmit} className="table-form">
+      <Input
+        label="Table Number"
+        type="text"
+        name="number"
+        value={formData.number}
+        onChange={handleInputChange}
+        required
+      />
+      <Input
+        label="Capacity"
+        type="number"
+        name="capacity"
+        value={formData.capacity}
+        onChange={handleInputChange}
+        required
+        min="1"
+      />
+      <Select
+        label="Zone"
+        name="zone"
+        value={formData.zone}
+        onChange={handleInputChange}
+        required
+      >
+        <option value="">Select Zone</option>
+        {selectedRestaurant?.zones?.map(zone => (
+          <option key={zone} value={zone}>{zone}</option>
+        ))}
+      </Select>
+      <Select
+        label="Status"
+        name="status"
+        value={formData.status}
+        onChange={handleInputChange}
+        required
+      >
+        <option value="available">Available</option>
+        <option value="occupied">Occupied</option>
+        <option value="reserved">Reserved</option>
+        <option value="maintenance">Maintenance</option>
+      </Select>
+      {error && <div className="error-message">{error}</div>}
+    </form>
+  );
 
-    try {
-      const response = await fetch(`http://localhost:3000/tables/${table.id}`, {
-        method: 'DELETE',
-      });
+  const footer = (
+    <div className="form-actions">
+      <Button type="submit" onClick={handleSubmit} disabled={loading}>
+        {loading ? 'Saving...' : (table ? 'Update Table' : 'Create Table')}
+      </Button>
+      {table && (
+        <Button
+          type="button"
+          onClick={async () => {
+            if (!window.confirm('Are you sure you want to delete this table?')) {
+              return;
+            }
 
-      if (!response.ok) {
-        throw new Error('Failed to delete table');
-      }
+            setLoading(true);
+            setError(null);
 
-      onSaved();
-      setFormData({
-        ...initialFormState,
-        zone: selectedZone === 'all' ? '' : selectedZone
-      });
-    } catch (err) {
-      console.error('Error deleting table:', err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+            try {
+              const response = await fetch(`http://localhost:3000/tables/${table.id}`, {
+                method: 'DELETE',
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to delete table');
+              }
+
+              onSaved();
+              setFormData(initialFormState);
+            } catch (err) {
+              setError(err.message);
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={loading}
+          danger
+        >
+          {loading ? 'Deleting...' : 'Delete Table'}
+        </Button>
+      )}
+    </div>
+  );
 
   if (!selectedRestaurant) {
     return (
@@ -140,85 +198,11 @@ const TableForm = ({ table, onSaved }) => {
   }
 
   return (
-    <div className="table-form-container">
-      <Title>{table ? 'Edit Table' : 'New Table'}</Title>
-      
-      <form onSubmit={handleSubmit} className="table-form">
-        <div className="table-form-group">
-          <Input
-            label="Table Number"
-            type="text"
-            name="number"
-            value={formData.number}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-
-        <div className="table-form-group">
-          <Input
-            label="Capacity"
-            type="number"
-            name="capacity"
-            value={formData.capacity}
-            onChange={handleInputChange}
-            required
-            min="1"
-          />
-        </div>
-
-        <div className="table-form-group">
-          <Input
-            label="Zone"
-            type="text"
-            name="zone"
-            value={formData.zone}
-            onChange={handleInputChange}
-            required
-            disabled={selectedZone !== 'all'}
-          />
-        </div>
-
-        <div className="table-form-group">
-          <Select
-            label="Status"
-            name="status"
-            value={formData.status}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="available">Available</option>
-            <option value="occupied">Occupied</option>
-            <option value="reserved">Reserved</option>
-          </Select>
-        </div>
-
-        {error && <div className="table-form-error">{error}</div>}
-
-        <div className="table-button-group">
-          <Button
-            type="submit"
-            disabled={loading}
-            primary
-            className="table-update-button"
-          >
-            {loading ? 'Saving...' : (table ? 'Update Table' : 'Create Table')}
-          </Button>
-
-          {table && (
-            <Button
-              type="button"
-              onClick={handleDelete}
-              disabled={loading}
-              danger
-              className="table-delete-button"
-            >
-              {loading ? 'Deleting...' : 'Delete Table'}
-            </Button>
-          )}
-        </div>
-      </form>
-    </div>
+    <Card
+      card-header={header}
+      card-body={body}
+      card-footer={footer}
+    />
   );
 };
 

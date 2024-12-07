@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Restaurants.css';
 import RestaurantList from './RestaurantList';
 import RestaurantForm from './RestaurantForm';
+import Card from '../../common/Card/Card';
 import { useAppContext } from '../../../context/AppContext';
 
 const Restaurants = () => {
@@ -50,22 +51,35 @@ const Restaurants = () => {
     return <div className="restaurants-error">{error}</div>;
   }
 
-  return (
-    <div className="restaurants-container">
+  const header = (
+    <div className="restaurants-header">
+      <h2>Restaurants Management</h2>
+    </div>
+  );
+
+  const body = (
+    <div className="restaurants-content">
       <div className="list-section">
-        <RestaurantList 
-          restaurants={restaurants}
-          onSelectRestaurant={() => {}} 
-        />
+        <RestaurantList restaurants={restaurants} />
       </div>
       <div className="form-section">
-        <RestaurantForm
-          selectedRestaurant={selectedRestaurant}
-          onRestaurantSaved={handleRestaurantSaved}
-          onRestaurantDeleted={handleRestaurantDeleted}
-        />
+        <RestaurantForm onSave={handleRestaurantSaved} onDelete={handleRestaurantDeleted} />
       </div>
     </div>
+  );
+
+  const footer = (
+    <div className="restaurants-footer">
+      <p>Total Restaurants: {restaurants.length}</p>
+    </div>
+  );
+
+  return (
+    <Card
+      card-header={header}
+      card-body={body}
+      card-footer={footer}
+    />
   );
 };
 

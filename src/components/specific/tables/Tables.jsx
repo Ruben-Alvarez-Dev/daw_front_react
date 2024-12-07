@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Tables.css';
 import { useAppContext } from '../../../context/AppContext';
-import { Card } from '../../common';
+import { Card, Title } from '../../common';
 import TableList from './TableList';
 import TableForm from './TableForm';
 import RestaurantSelector from '../restaurants/RestaurantSelector';
@@ -40,46 +40,62 @@ const Tables = () => {
   return (
     <div className="tables-container">
       <div className="tables-main-content">
-        <Card className="tables-left-section">
+        <div className="tables-left-section">
           <RestaurantSelector />
-        </Card>
+        </div>
 
-        <Card className="tables-center-section">
-          {selectedRestaurant ? (
-            <div>
-              <select 
-                value={activeZone} 
-                onChange={(e) => setActiveZone(e.target.value)}
-                className="zone-selector"
-              >
-                <option value="">All Zones</option>
-                {zones.map((zone) => (
-                  <option key={zone} value={zone}>
-                    {zone}
-                  </option>
-                ))}
-              </select>
-              <TableList
-                restaurantId={selectedRestaurant.id}
-                zones={zones}
-                selectedZone={activeZone}
-                onSelectTable={handleTableSelect}
-                selectedTable={selectedTable}
-              />
+        <Card 
+          card-header={<Title>Zone Selection</Title>}
+          card-body={
+            selectedRestaurant ? (
+              <div className="zone-selector">
+                <select 
+                  value={activeZone} 
+                  onChange={(e) => setActiveZone(e.target.value)}
+                  className="zone-select"
+                >
+                  <option value="">Select a zone</option>
+                  {zones.map((zone) => (
+                    <option key={zone} value={zone}>
+                      {zone}
+                    </option>
+                  ))}
+                </select>
+                <TableList
+                  restaurantId={selectedRestaurant.id}
+                  zones={zones}
+                  selectedZone={activeZone}
+                  onSelectTable={handleTableSelect}
+                  selectedTable={selectedTable}
+                />
+              </div>
+            ) : (
+              <div className="no-restaurant-message">
+                Please select a restaurant first
+              </div>
+            )
+          }
+          card-footer={
+            <div className="zone-info">
+              {activeZone ? (
+                <p>Active Zone: {activeZone}</p>
+              ) : (
+                <p>No zone selected</p>
+              )}
             </div>
-          ) : (
-            <p>Please select a restaurant first</p>
-          )}
-        </Card>
+          }
+        />
 
-        <Card className="tables-right-section">
-          <TableForm
-            restaurantId={selectedRestaurant?.id}
-            table={selectedTable}
-            zones={zones}
-            onClose={() => setSelectedTable(null)}
-          />
-        </Card>
+        <div className="tables-right-section">
+          {selectedTable && (
+            <TableForm
+              restaurantId={selectedRestaurant?.id}
+              table={selectedTable}
+              zones={zones}
+              onClose={() => setSelectedTable(null)}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

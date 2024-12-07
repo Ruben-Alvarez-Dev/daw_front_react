@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Users.css';
 import UserList from './UserList';
 import UserForm from './UserForm';
+import Card from '../../common/Card/Card';
 import { useAppContext } from '../../../context/AppContext';
 
 const Users = () => {
@@ -34,30 +35,46 @@ const Users = () => {
 
   const handleUserSaved = () => {
     setSelectedUser(null);
-    fetchUsers(); // Recargar usuarios después de guardar
+    fetchUsers();
   };
 
   const handleUserDeleted = () => {
     setSelectedUser(null);
-    fetchUsers(); // Recargar usuarios después de eliminar
+    fetchUsers();
   };
 
   if (loading) return <div>Loading users...</div>;
   if (error) return <div>{error}</div>;
 
-  return (
-    <div className="users-container">
+  const header = (
+    <div className="users-header">
+      <h2>Users Management</h2>
+    </div>
+  );
+
+  const body = (
+    <div className="users-content">
       <div className="list-section">
         <UserList users={users} />
       </div>
       <div className="form-section">
-        <UserForm
-          selectedUser={selectedUser}
-          onUserSaved={handleUserSaved}
-          onUserDeleted={handleUserDeleted}
-        />
+        <UserForm onSave={handleUserSaved} onDelete={handleUserDeleted} />
       </div>
     </div>
+  );
+
+  const footer = (
+    <div className="users-footer">
+      <p>Total Users: {users.length}</p>
+    </div>
+  );
+
+  return (
+    <Card
+      card-header={header}
+      card-body={body}
+      card-footer={footer}
+    />
   );
 };
 

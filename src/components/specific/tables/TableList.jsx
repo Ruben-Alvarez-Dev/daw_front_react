@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './TableList.css';
-import { Title } from '../../common';
+import { Title, Card } from '../../common';
 import { useAppContext } from '../../../context/AppContext';
 
 const TableList = ({ onSelectTable }) => {
@@ -12,7 +12,7 @@ const TableList = ({ onSelectTable }) => {
   useEffect(() => {
     if (selectedRestaurant) {
       fetchTables();
-      setActiveZone(''); // Reset to empty (All zones) when restaurant changes
+      setActiveZone('');
     } else {
       setTables([]);
     }
@@ -37,79 +37,83 @@ const TableList = ({ onSelectTable }) => {
   };
 
   if (!selectedRestaurant) {
-    return <div className="table-message">Please select a restaurant</div>;
+    return (
+      <Card
+        card-header={<Title>Tables</Title>}
+        card-body={<div className="table-message">Please select a restaurant</div>}
+        card-footer={<div>No restaurant selected</div>}
+      />
+    );
+  }
+
+  if (loading) {
+    return (
+      <Card
+        card-header={<Title>Tables</Title>}
+        card-body={<div className="table-message">Loading tables...</div>}
+        card-footer={<div>Loading...</div>}
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <Card
+        card-header={<Title>Tables</Title>}
+        card-body={<div className="error-message">{error}</div>}
+        card-footer={<div>Error loading tables</div>}
+      />
+    );
   }
 
   const availableZones = selectedRestaurant.zones || ['main'];
+  const filteredTables = !activeZone ? tables : tables.filter(table => table.zone === activeZone);
 
-  // Filter tables based on active zone
-  const filteredTables = !activeZone 
-    ? tables 
-    : tables.filter(table => table.zone === activeZone);
+  const header = (
+    <div className="table-list-header">
+      <Title>Tables</Title>
+      <select value={activeZone} onChange={(e) => setActiveZone(e.target.value)} className="zone-selector">
+        <option value="">All Zones</option>
+        {availableZones.map(zone => (
+          <option key={zone} value={zone}>{zone}</option>
+        ))}
+      </select>
+    </div>
+  );
 
-  const handleZoneChange = (e) => {
-    const newZone = e.target.value;
-    setActiveZone(newZone === 'all' ? '' : newZone);
-  };
+  const body = (
+    <div className="table-grid">
+      {filteredTables.map(table => (
+        <div
+          key={table.id}
+          className={`table-item ${selectedTable?.id === table.id ? 'selected' : ''}`}
+          onClick={() => {
+            setSelectedTable(table);
+            if (onSelectTable) onSelectTable(table);
+          }}
+        >
+          <div className="table-number">Table {table.number}</div>
+          <div className="table-capacity">Capacity: {table.capacity}</div>
+          <div className="table-zone">Zone: {table.zone}</div>
+          <div className="table-status">Status: {table.status}</div>
+        </div>
+      ))}
+    </div>
+  );
 
-  const handleTableClick = (table) => {
-    setSelectedTable(table);
-    if (onSelectTable) {
-      onSelectTable(table);
-    }
-  };
+  const footer = (
+    <div className="table-list-footer">
+      <p>Total Tables: {filteredTables.length}</p>
+      {activeZone && <p>Zone: {activeZone}</p>}
+    </div>
+  );
 
   return (
-    <div className="table-list-container">
-      <Title>Tables</Title>
-      
-      <div className="table-zone-selector">
-        <label htmlFor="zone-select">Zone:</label>
-        <select
-          id="zone-select"
-          value={activeZone || 'all'}
-          onChange={handleZoneChange}
-          className="table-select"
-        >
-          <option value="all">All Zones</option>
-          {availableZones.map(zone => (
-            <option key={zone} value={zone}>
-              {zone.charAt(0).toUpperCase() + zone.slice(1)}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {loading && <div className="table-message">Loading tables...</div>}
-      {error && <div className="table-error">{error}</div>}
-      
-      {!loading && !error && (
-        <div className="table-grid">
-          {filteredTables.length === 0 ? (
-            <div className="table-message">No tables found</div>
-          ) : (
-            filteredTables.map(table => (
-              <div
-                key={table.id}
-                className={`table-card ${selectedTable?.id === table.id ? 'selected' : ''}`}
-                onClick={() => handleTableClick(table)}
-              >
-                <div className="table-card-header">
-                  <h3>Table {table.number}</h3>
-                  <span className={`table-status status-${table.status}`}>
-                    {table.status}
-                  </span>
-                </div>
-                <div className="table-info">
-                  <p>Zone: {table.zone}</p>
-                  <p>Capacity: {table.capacity}</p>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      )}
-    </div>
+    <Card
+      card-header={header}
+      card-body={body}
+      card-footer={footer}
+    />
   );
 };
 

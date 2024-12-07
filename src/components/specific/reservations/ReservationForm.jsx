@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ReservationForm.css';
-import { Card, Title, Button } from '../../common';
+import { Card, Title, Button, Input, Select } from '../../common';
+import { useAppContext } from '../../../context/AppContext';
 
 const RESERVATION_STATUS = {
   PENDING: 'pending',
@@ -8,11 +9,12 @@ const RESERVATION_STATUS = {
   CANCELLED: 'cancelled'
 };
 
-const ReservationForm = ({ selectedReservation, onReservationSaved, onReservationDeleted }) => {
+const ReservationForm = ({ onSave, onDelete }) => {
+  const { selectedReservation } = useAppContext();
   const initialFormState = {
     date: '',
     time: '',
-    numberOfGuests: '',
+    guests: '',
     notes: '',
     status: RESERVATION_STATUS.PENDING
   };
@@ -23,28 +25,17 @@ const ReservationForm = ({ selectedReservation, onReservationSaved, onReservatio
 
   useEffect(() => {
     if (selectedReservation) {
-      try {
-        const date = new Date(selectedReservation.date);
-        if (isNaN(date.getTime())) {
-          throw new Error('Invalid date format');
-        }
+      const date = new Date(selectedReservation.date);
+      const formattedDate = date.toISOString().split('T')[0];
+      const formattedTime = date.toTimeString().slice(0, 5);
 
-        const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
-        const formattedDate = localDate.toISOString().split('T')[0];
-        const formattedTime = localDate.toTimeString().slice(0, 5);
-
-        setFormData({
-          date: formattedDate,
-          time: formattedTime,
-          numberOfGuests: selectedReservation.numberOfGuests?.toString() || '',
-          notes: selectedReservation.notes || '',
-          status: selectedReservation.status || RESERVATION_STATUS.PENDING
-        });
-        setError(null);
-      } catch (err) {
-        console.error('Error updating form with reservation:', err);
-        setError('Error loading reservation details: ' + err.message);
-      }
+      setFormData({
+        date: formattedDate,
+        time: formattedTime,
+        guests: selectedReservation.guests?.toString() || '',
+        notes: selectedReservation.notes || '',
+        status: selectedReservation.status || RESERVATION_STATUS.PENDING
+      });
     } else {
       setFormData(initialFormState);
     }
@@ -56,53 +47,26 @@ const ReservationForm = ({ selectedReservation, onReservationSaved, onReservatio
       ...prev,
       [name]: value
     }));
-    setError(null);
-  };
-
-  const validateForm = () => {
-    if (!formData.date) return 'Date is required';
-    if (!formData.time) return 'Time is required';
-    
-    const guests = parseInt(formData.numberOfGuests);
-    if (isNaN(guests) || guests < 1) return 'Number of guests must be at least 1';
-    
-    const dateTime = new Date(`${formData.date}T${formData.time}`);
-    if (isNaN(dateTime.getTime())) return 'Invalid date or time';
-    
-    if (!formData.status) return 'Status is required';
-    
-    return null;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const validationError = validateForm();
-    if (validationError) {
-      setError(validationError);
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
     try {
-      const localDate = new Date(`${formData.date}T${formData.time}`);
-      const utcDate = new Date(localDate.getTime() + (localDate.getTimezoneOffset() * 60000));
-
       const reservationData = {
-        date: utcDate.toISOString(),
-        numberOfGuests: parseInt(formData.numberOfGuests),
-        notes: formData.notes,
-        status: formData.status
+        ...formData,
+        date: new Date(`${formData.date}T${formData.time}`).toISOString(),
+        guests: parseInt(formData.guests)
       };
 
-      const url = 'http://localhost:3000/reservations';
-      const method = selectedReservation ? 'PUT' : 'POST';
-      const finalUrl = selectedReservation ? `${url}/${selectedReservation.id}` : url;
+      const url = selectedReservation
+        ? `http://localhost:3000/reservations/${selectedReservation.id}`
+        : 'http://localhost:3000/reservations';
 
-      const response = await fetch(finalUrl, {
-        method,
+      const response = await fetch(url, {
+        method: selectedReservation ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -110,140 +74,127 @@ const ReservationForm = ({ selectedReservation, onReservationSaved, onReservatio
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Failed to save reservation');
+        throw new Error('Failed to save reservation');
       }
 
       const savedReservation = await response.json();
-      console.log('Reservation saved successfully:', savedReservation);
-      onReservationSaved();
-    } catch (err) {
-      console.error('Error saving reservation:', err);
-      setError(err.message || 'Failed to save reservation');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!selectedReservation) return;
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch(`http://localhost:3000/reservations/${selectedReservation.id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete reservation');
+      if (onSave) onSave(savedReservation);
+      
+      if (!selectedReservation) {
+        setFormData(initialFormState);
       }
-
-      console.log('Reservation deleted successfully');
-      onReservationDeleted();
     } catch (err) {
-      console.error('Error deleting reservation:', err);
-      setError('Failed to delete reservation');
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
+  const header = (
+    <Title>{selectedReservation ? 'Edit Reservation' : 'New Reservation'}</Title>
+  );
+
+  const body = (
+    <form onSubmit={handleSubmit} className="reservation-form">
+      <div className="form-row">
+        <Input
+          label="Date"
+          type="date"
+          name="date"
+          value={formData.date}
+          onChange={handleInputChange}
+          required
+        />
+        <Input
+          label="Time"
+          type="time"
+          name="time"
+          value={formData.time}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+      <Input
+        label="Number of Guests"
+        type="number"
+        name="guests"
+        value={formData.guests}
+        onChange={handleInputChange}
+        required
+        min="1"
+      />
+      <Select
+        label="Status"
+        name="status"
+        value={formData.status}
+        onChange={handleInputChange}
+        required
+      >
+        <option value={RESERVATION_STATUS.PENDING}>Pending</option>
+        <option value={RESERVATION_STATUS.CONFIRMED}>Confirmed</option>
+        <option value={RESERVATION_STATUS.CANCELLED}>Cancelled</option>
+      </Select>
+      <div className="form-group">
+        <label>Notes</label>
+        <textarea
+          name="notes"
+          value={formData.notes}
+          onChange={handleInputChange}
+          rows="3"
+        />
+      </div>
+      {error && <div className="error-message">{error}</div>}
+    </form>
+  );
+
+  const footer = (
+    <div className="form-actions">
+      <Button type="submit" onClick={handleSubmit} disabled={loading}>
+        {loading ? 'Saving...' : (selectedReservation ? 'Update' : 'Create')}
+      </Button>
+      {selectedReservation && (
+        <Button
+          type="button"
+          onClick={async () => {
+            if (!window.confirm('Are you sure you want to delete this reservation?')) {
+              return;
+            }
+
+            setLoading(true);
+            setError(null);
+
+            try {
+              const response = await fetch(`http://localhost:3000/reservations/${selectedReservation.id}`, {
+                method: 'DELETE',
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to delete reservation');
+              }
+
+              if (onDelete) onDelete();
+              setFormData(initialFormState);
+            } catch (err) {
+              setError(err.message);
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={loading}
+          className="delete"
+        >
+          {loading ? 'Deleting...' : 'Delete'}
+        </Button>
+      )}
+    </div>
+  );
 
   return (
-    <Card>
-      <div className="form-container">
-        <Title>{selectedReservation ? 'Edit Reservation' : 'New Reservation'}</Title>
-        
-        <form onSubmit={handleSubmit} className="form">
-          {error && <div className="error">{error}</div>}
-          
-          <div className="form-group">
-            <label htmlFor="date">Date</label>
-            <input
-              type="date"
-              id="date"
-              name="date"
-              value={formData.date}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="time">Time</label>
-            <input
-              type="time"
-              id="time"
-              name="time"
-              value={formData.time}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="numberOfGuests">Number of Guests</label>
-            <input
-              type="number"
-              id="numberOfGuests"
-              name="numberOfGuests"
-              value={formData.numberOfGuests}
-              onChange={handleInputChange}
-              min="1"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="status">Status</label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              required
-            >
-              <option value={RESERVATION_STATUS.PENDING}>Pending</option>
-              <option value={RESERVATION_STATUS.CONFIRMED}>Confirmed</option>
-              <option value={RESERVATION_STATUS.CANCELLED}>Cancelled</option>
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="notes">Notes</label>
-            <textarea
-              id="notes"
-              name="notes"
-              value={formData.notes}
-              onChange={handleInputChange}
-              rows="3"
-            />
-          </div>
-
-          <div className="button-group">
-            <Button
-              type="submit"
-              className="submit-button"
-              disabled={loading}
-            >
-              {loading ? 'Saving...' : (selectedReservation ? 'Update' : 'Create')}
-            </Button>
-
-            {selectedReservation && (
-              <Button
-                type="button"
-                className="delete-button"
-                onClick={handleDelete}
-                disabled={loading}
-              >
-                Delete
-              </Button>
-            )}
-          </div>
-        </form>
-      </div>
-    </Card>
+    <Card
+      card-header={header}
+      card-body={body}
+      card-footer={footer}
+    />
   );
 };
 

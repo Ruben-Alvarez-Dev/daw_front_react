@@ -15,47 +15,59 @@ const UserList = ({ users, onSelectUser }) => {
 
   if (!users?.length) {
     return (
-      <Card>
-        <div className="no-users">No users found</div>
-      </Card>
+      <Card
+        card-header={<Title>Users List</Title>}
+        card-body={<div className="no-users">No users found</div>}
+        card-footer={<div>Total users: 0</div>}
+      />
     );
   }
 
-  return (
-    <Card>
-      <Title>Users List</Title>
-      <div className="user-list">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Last Login</th>
+  const header = <Title>Users List</Title>;
+
+  const body = (
+    <div className="user-list">
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Last Login</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr
+              key={user.id}
+              onClick={() => handleUserClick(user)}
+              className={`table-row ${selectedUser?.id === user.id ? 'selected' : ''}`}
+            >
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td className="role">{user.role}</td>
+              <td>{user.status}</td>
+              <td>{new Date(user.lastLogin).toLocaleString()}</td>
             </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr
-                key={user.id}
-                onClick={() => handleUserClick(user)}
-                className={`table-row ${selectedUser?.id === user.id ? 'selected' : ''}`}
-              >
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td className="role">{user.role}</td>
-                <td>{user.status}</td>
-                <td>{new Date(user.lastLogin).toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="footer">
-        <p>Total Users: {users.length}</p>
-      </div>
-    </Card>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const footer = (
+    <div className="user-list-footer">
+      <p>Total users: {users.length}</p>
+    </div>
+  );
+
+  return (
+    <Card
+      card-header={header}
+      card-body={body}
+      card-footer={footer}
+    />
   );
 };
 
